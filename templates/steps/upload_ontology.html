@@ -1,0 +1,253 @@
+{% extends 'steps/step_template.html' %}
+{% block title %}Data Integration{% endblock %}
+{%  block content %}
+    <main id="main">
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header"><br/>
+                </header>
+                <form id="msform">
+                    <fieldset id="step-1">
+                        <div class="row-cols-3" style="text-align: left">
+                            <label for="ontology">Upload an ontology file</label>
+                            <input type="file" id="ontology" class="form-control" style="width: 300px" accept=".csv,.ttl" onchange="read_ontology_file()">
+                            <label for="ontology_preview"></label>
+                            <textarea id="ontology_preview" style="height: 500px" readonly></textarea>
+                        </div>
+                        <div class="row justify-content-center">
+                            <input type="button" id="next-1" name="next" class="next action-button" value="Next" onclick="next_step(this)"/>
+                        </div>
+                    </fieldset>
+                    <fieldset id="step-2">
+                        <div class="form-card">
+                            <div class="row">
+                                <label for="source_type">Choose your source:</label>
+                                <select id="source_type" style="width: 300px" onchange="sourceTypeSelected()">
+                                    <option value="db">Connect to DB</option>
+                                    <option value="sparql">Connect to SPARQL endpoint</option>
+                                    <option value="local">Upload local source</option>
+                                </select>
+                            </div>
+                            <div id="source_container" class="row">
+                                <label for="data_source">URI to source:</label>
+                                <input id="data_source" type="url">
+                                <label for="db_username">Username</label>
+                                <input id="db_username" type="text">
+                                <label for="db_password">Password</label>
+                                <input id="db_password" type="password">
+                                <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
+                            </div>
+                            <div id="rml_container" class="row">
+                                <label for="rml_mapping">RML mapping:</label>
+                                <textarea id="rml_mapping" placeholder="Write your RML mapping rules here." ></textarea>
+                                <label for="rml_upload_button">Or upload an existing RML mapping:</label>
+                                <input id="rml_upload_button" type="file" class="form-control" value="Upload" onchange="readRML()">
+                            </div>
+                            <div class="row justify-content-center">
+                                <input type="button" id="back-2" name="back" class="back action-button" value="Back" onclick="previous_step(this)">
+                                <input type="button" id="next-2" name="next" class="next action-button" value="Next" onclick="next_step(this)"/>
+                            </div>
+                        </div>
+                        
+                    </fieldset>
+                    <fieldset id="step-3">
+                        <div class="form-card">
+                            <div class="row">
+                                <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
+                                <select id="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
+                                    <option value="forward">Materialisation</option>
+                                    <option value="backward">Query</option>
+                                </select>
+                            </div>
+                            <div id="tripleStore" class="row" style="display: block">
+                                <label for="tripleStore_uri">URI to TripleStore</label>
+                                <input type="url" id="tripleStore_uri">
+                                <label for="username">Username</label>
+                                <input id="username" type="text">
+                                <label for="password">Password</label>
+                                <input id="password" type="password">
+                                <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
+                            </div>
+                            <div id="queryContainer" class="row" style="display: none">
+                                <label for="query_text">Input query: </label>
+                                <textarea id="query_text" placeholder="Write your query here."></textarea>
+                                <label for="query_upload_button">Or upload an existing query:</label>
+                                <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
+                            </div>
+                            <div class="row justify-content-center">
+                                <input type="button" id="back-3" name="back" class="back action-button" value="Back" onclick="previous_step(this)">
+                                <input type="button" id="next-3" name="next" class="next action-button" value="Materialise" onclick="finish()"/>
+                            </div>
+                        </div>
+                        
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </main>
+<script type="text/javascript">
+    
+function readQuery() {
+    return read_file("query_upload_button","query_text");
+}
+
+function read_file(param,output) {
+    const ontology_file = document.getElementById(param).files[0];
+    const reader = new FileReader();
+    reader.readAsText(ontology_file, "UTF-8");
+    reader.addEventListener('load', (event) => {
+        document.getElementById(output).innerHTML = event.target.result;
+    });
+    
+    reader.addEventListener('progress', (event) => {
+        if (event.loaded && event.total) {
+          const percent = (event.loaded / event.total) * 100;
+          console.log(`Progress: ${Math.round(percent)}`);
+        }
+    });
+
+    return reader;
+}
+
+
+function read_ontology_file() {
+    return read_file("ontology","ontology_preview");
+}
+
+
+function readRML() {
+        return read_file("rml_upload_button","rml_mapping")
+    }
+
+
+function previous_step(element) {
+        const previous_step = parseInt(element.id.split("-")[1]);
+        const current_step = previous_step - 1;
+        previous_fs = document.getElementById("step-"+previous_step);
+        current_fs = document.getElementById("step-"+current_step);
+        previous_fs.setAttribute("style","display: none");
+        current_fs.setAttribute("style","display: block");
+        console.log(current_fs);
+    }
+    
+    function integrationTypeSelected() {
+        const option = document.getElementById("integration_type").value;
+        if (option === "forward") {
+            document.getElementById("next-3").value = "Materialise";
+            document.getElementById("tripleStore").setAttribute("style","display: block");
+            document.getElementById("queryContainer").setAttribute("style","display: none");
+        }
+        else if (option === "backward") {
+            document.getElementById("next-3").value = "Run query";
+            document.getElementById("tripleStore").setAttribute("style","display: none");
+            document.getElementById("queryContainer").setAttribute("style","display: block");
+        }
+    }
+    
+    function removeAllChildNodes(parent) {
+        while (parent.firstChild) {
+            parent.removeChild(parent.firstChild);
+        }
+    }   
+    
+    function sourceTypeSelected() {
+        const source_container = document.getElementById("source_container");
+        removeAllChildNodes(source_container);
+        const source_type = document.getElementById("source_type").value;
+        if (source_type === "local") {
+            const label = document.createElement("label");
+            label.setAttribute("for","data_source");
+            label.innerText = "Choose a file to upload: ";
+            const input = document.createElement("input");
+            input.setAttribute("id","data_source");
+            input.setAttribute("type","file");
+            source_container.append(label);
+            source_container.append(input);
+        }
+        else {
+            const label = document.createElement("label");
+            label.setAttribute("for","data_source");
+            const input = document.createElement("input");
+            input.setAttribute("id","data_source");
+            input.setAttribute("type","url");
+            const label1 = document.createElement("label");
+            label1.innerText = "Username";
+            label.setAttribute("for","db_username");
+            const input1 = document.createElement("input");
+            input.setAttribute("id","db_username");
+            input.setAttribute("type","text");
+            const label2 = document.createElement("label");
+            label2.innerText = "Password";
+            label.setAttribute("for","db_password");
+            const input2 = document.createElement("input");
+            input.setAttribute("id","db_password");
+            input.setAttribute("type","text");
+            const connect_button = document.createElement("input");
+            connect_button.setAttribute("id","connect_button");
+            connect_button.setAttribute("type","button");
+            connect_button.setAttribute("class","action-button");
+            connect_button.setAttribute("onclick","connect_to_db()");
+            connect_button.value = "Connect";
+            if (source_type === "db") {
+                label.innerText = "URI to source: ";
+            }
+            else if (source_type === "sparql") {
+                label.innerText = "URI to SPARQL endpoint: ";
+                connect_button.setAttribute("onclick","connect_to_sparql_endpoint()");
+            }
+            source_container.append(label);
+            source_container.append(input);
+            source_container.append(label1);
+            source_container.append(input1);
+            source_container.append(label2);
+            source_container.append(input2);
+            source_container.append(connect_button);
+        }
+    }
+    
+    function next_step(element) {
+        const previous_step = parseInt(element.id.split("-")[1]);
+        const current_step = previous_step + 1;
+        previous_fs = document.getElementById("step-"+previous_step);
+        current_fs = document.getElementById("step-"+current_step);
+        previous_fs.setAttribute("style","display: none");
+        current_fs.setAttribute("style","display: block");
+        console.log(current_fs);
+    }
+    
+    function connect_to_db() {
+        var uri = document.getElementById("data_source").value;
+    }
+    
+    function connect_to_sparql_endpoint() {
+        var uri = document.getElementById("data_source").value;
+    }
+    
+    var current_fs, next_fs, previous_fs; //fieldsets
+                var opacity;
+                var current = 1;
+                var steps = document.getElementById("msform").getElementsByTagName("fieldset");
+    
+    
+                function showStep(current_fs, next_fs) {
+                    $("#progressbar li").eq($("fieldset").index(next_fs)).addClass("active");
+    
+                    //show the next fieldset
+                    next_fs.show();
+                    //hide the current fieldset with style
+                    current_fs.animate({opacity: 0}, {
+                        step: function (now) {
+                            // for making fielset appear animation
+                            opacity = 1 - now;
+    
+                            current_fs.css({
+                                'display': 'none',
+                                'position': 'relative'
+                            });
+                            next_fs.css({'opacity': opacity});
+                        },
+                        duration: 500
+                    });
+                }
+</script>
+{%  endblock %}

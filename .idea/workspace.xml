@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="73a31a6b-228e-4b78-988c-887718a64105" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/inspectionProfiles/profiles_settings.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/integration_mockup.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration/urls.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/css/jquery.multiselect.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/css/style.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/footer-bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/hero-bg.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/hero-img.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/hero-img.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/logo.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/team-shape.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/values-1.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/values-2.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/img/values-3.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/bootstrap-datepicker.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/jquery.multiselect.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/jquery.quicksearch.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker-en-CA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ar-DZ.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ar-tn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ar.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.az.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.bg.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.bm.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.bn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.br.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.bs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ca.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.cs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.cy.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.da.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.de.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.el.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-AU.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-CA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-GB.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-IE.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-NZ.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-US.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.en-ZA.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.eo.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.es.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.et.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.eu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.fa.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.fi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.fo.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.fr-CH.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.fr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.gl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.he.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.hi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.hr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.hu.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.hy.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.id.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.is.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.it-CH.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.it.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ja.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ka.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.kh.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.kk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.km.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ko.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.kr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.lt.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.lv.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.me.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.mk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.mn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.mr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ms.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.nl-BE.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.nl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.no.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.oc.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.pl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.pt-BR.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.pt.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ro.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.rs-latin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.rs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ru.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.si.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sq.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sr-latin.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sv.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.sw.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.ta.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.tg.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.th.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.tk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.tr.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.uk.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.uz-cyrl.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.uz-latn.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.vi.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.zh-CN.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/locales/bootstrap-datepicker.zh-TW.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/main.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/js/multi-step.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/aos/aos.cjs.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/aos/aos.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/aos/aos.esm.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/aos/aos.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/aos/aos.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/bootstrap-icons.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/bootstrap-icons.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/bootstrap-icons.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/bootstrap-icons.scss" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/fonts/bootstrap-icons.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap-icons/fonts/bootstrap-icons.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.rtl.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.rtl.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.rtl.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-grid.rtl.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.rtl.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.rtl.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.rtl.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-reboot.rtl.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.rtl.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.rtl.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.rtl.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap-utilities.rtl.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.rtl.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.rtl.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.rtl.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/css/bootstrap.rtl.min.css.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.bundle.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.bundle.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.bundle.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.bundle.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.esm.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.esm.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.esm.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.esm.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/bootstrap/js/bootstrap.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/css/glightbox.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/css/glightbox.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/css/plyr.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/css/plyr.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/js/glightbox.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/glightbox/js/glightbox.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/isotope-layout/isotope.pkgd.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/isotope-layout/isotope.pkgd.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/php-email-form/validate.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/purecounter/purecounter_vanilla.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/purecounter/purecounter_vanilla.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.eot" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.glyph.json" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.less" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.symbol.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.ttf" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.woff" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/remixicon/remixicon.woff2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/swiper/swiper-bundle.min.css" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/swiper/swiper-bundle.min.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/integration_mockup/static/vendor/swiper/swiper-bundle.min.js.map" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base_template_organization.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/base_template_users.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/index.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/steps/data_sources.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/steps/step_template.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/templates/steps/upload_ontology.html" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DjangoConsoleOptions" custom-start-script="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)">
+    <option name="myCustomStartScript" value="import sys; print('Python %s on %s' % (sys.version, sys.platform))&#10;import django; print('Django %s' % django.get_version())&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;if 'setup' in dir(django): django.setup()&#10;import django_manage_shell; django_manage_shell.run(PROJECT_ROOT)" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+        <option value="HTML File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo"><![CDATA[{
+  "associatedIndex": 1
+}]]></component>
+  <component name="ProjectId" id="2c2Ey4XgCM0SdEv3VpMwLxLRndz" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "DefaultHtmlFileTemplate": "HTML File",
+    "Django Server.demo.executor": "Run",
+    "RunOnceActivity.OpenDjangoStructureViewOnStart": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "django.template.preview.state": "SHOW_EDITOR_AND_PREVIEW",
+    "git-widget-placeholder": "master",
+    "last_opened_file_path": "C:/Users/jos1y23/PycharmProjects/integration_mockup/templates/steps",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
+    "vue.rearranger.settings.migration": "true"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\jos1y23\PycharmProjects\integration_mockup\templates\steps" />
+      <recent name="C:\Users\jos1y23\PycharmProjects\integration_mockup\integration_mockup" />
+      <recent name="C:\Users\jos1y23\PycharmProjects\integration_mockup\templates" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\jos1y23\PycharmProjects\integration_mockup\integration_mockup" />
+      <recent name="C:\Users\jos1y23\PycharmProjects\integration_mockup" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="demo" type="Python.DjangoServer" factoryName="Django server">
+      <module name="integration_mockup" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+        <env name="DJANGO_SETTINGS_MODULE" value="integration_mockup.settings" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="SDK_NAME" value="Python 3.12 (integration_mockup)" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="launchJavascriptDebuger" value="false" />
+      <option name="port" value="8000" />
+      <option name="host" value="localhost" />
+      <option name="additionalOptions" value="" />
+      <option name="browserUrl" value="http://localhost:8000" />
+      <option name="runTestServer" value="false" />
+      <option name="runNoReload" value="false" />
+      <option name="useCustomRunCommand" value="false" />
+      <option name="customRunCommand" value="" />
+      <method v="2" />
+    </configuration>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-python-sdk-5a2391486177-2887949eec09-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-233.13763.11" />
+      </set>
+    </attachedChunks>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="73a31a6b-228e-4b78-988c-887718a64105" name="Changes" comment="" />
+      <created>1707301523883</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1707301523883</updated>
+      <workItem from="1707301545896" duration="27114000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

@@ -1,0 +1,23 @@
+{% extends 'steps/step_template.html' %}
+{% block title %}Upload your Ontology{% endblock %}
+{%  block content %}
+    <main id="main">
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header"><br/>
+                    {#          <p>Configure the consent/contract/privacy preference request form</p>#}
+                </header>
+                <form id="msform">
+                    <label for="ontology">
+                        <input type="file" id="ontology" accept=".csv,.ttl">
+                    </label>
+                    <div class="row justify-content-center">
+                    <label>
+                        <button class="action-button">Next</button>
+                    </label>
+                </div>
+                </form>
+            </div>
+        </section>
+    </main>
+{%  endblock %}
