@@ -1,0 +1,73 @@
+{% extends 'steps/step_template.html' %}
+{% load static %}
+{% block title %}Upload your Ontology{% endblock %}
+{%  block content %}
+    <main id="main">
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header"><br/>
+                    {#          <p>Configure the consent/contract/privacy preference request form</p>#}
+                </header>
+                <form id="msform" action="{% url 'rml_mapping' %}" method="post" enctype="multipart/form-data">
+                    <label for="ontology">
+                        <input type="file" id="rml_file" name="rml_file" accept=".rml,.rdf">
+                    </label>
+                    <input type="submit" value="Submit">
+                    <div class="row justify-content-center">
+                        <label>
+                            <button class="action-button">Next</button>
+                        </label>
+                    </div>
+                    <div id="toolbox">
+                        <input id="upload-input" type="image" title="upload graph" class="action-button" alt="upload graph">
+                        <input type="image" id="download-input" title="download graph" class="action-button" alt="download graph">
+                        <input type="image" id="delete-graph" title="delete graph" class="action-button" alt="delete graph"> 
+                    </div>
+                    {%csrf_token%}
+                </form>
+            </div>
+        </section>
+
+    <script src="//d3js.org/d3.v3.js" charset="utf-8"></script>    
+    <script src="//cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+    <script src="{% static 'js/graph-creator.js' %}">
+    </script>
+    <script>
+        function read_file(param,output) {
+            const ontology_file = document.getElementById(rml_file).files[0];
+            const reader = new FileReader();
+            reader.readAsText(ontology_file, "UTF-8");
+            reader.addEventListener('load', (event) => {
+                document.getElementById(output).innerHTML = event.target.result;
+            });
+            
+            reader.addEventListener('progress', (event) => {
+                if (event.loaded && event.total) {
+                  const percent = (event.loaded / event.total) * 100;
+                  console.log(`Progress: ${Math.round(percent)}`);
+                }
+            });
+        
+            return reader;
+        }
+        
+        
+        function read_ontology_file() {
+            return read_file("ontology","ontology_preview");
+        }
+        
+        
+        function readRML(param) {
+            let suffix = '';
+                if (param.getAttribute("id").indexOf("-") > 0) {
+                    suffix = param.getAttribute("id");
+                    suffix = suffix.substring(suffix.indexOf("-"));
+                }
+                else {
+                    suffix = '';
+                }
+            return read_file("rml_upload_button"+suffix,"rml_mapping"+suffix)
+        }
+    </script>
+    </main>
+{%  endblock %}
