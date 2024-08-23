@@ -1,0 +1,72 @@
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://example.org/rules/> .
+@prefix schema: <http://schema.org/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#>
+
+:TriplesMap a rr:TriplesMap;
+	rml:logicalSource [
+		rml:source "readings.csv" ;
+		rml:referenceFormulation ql:CSV
+	];
+
+	rr:subjectMap [
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/readings/{id}"
+	];
+	
+	rr:predicateObjectMap [
+		rr:predicate upcast:involves_exercise ;
+		rr:objectMap [
+			rr:parentTriplesMap :ExerciseData ;
+			rr:joinCondition [
+				rr:child "exercise_id" ;
+				rr:parent "id" ;
+			]
+		]
+	];
+	
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_value;
+	  rr:objectMap [
+	   rml:reference "value" ;
+	   rr:datatype xsd:double
+	 ]
+	];
+
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_date_time;
+	  rr:objectMap [
+	   rml:reference "start_time" ;
+	   rr:datatype xsd:datetime
+	 ]
+	].
+	
+	
+
+:ExerciseData a rr:TriplesMap;
+	rml:logicalSource [
+		rml:source "data_example.csv" ;
+		rml:referenceFormulation ql:CSV
+	];
+	
+	rr:subjectMap [
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/exercise/{id}"
+	];
+
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_difficulty_level;
+	  rr:objectMap [
+		rml:reference "difficulty_level"
+	  ]
+	];
+
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_exercise_type;
+	  rr:objectMap [
+		rml:reference "exercise_type"
+	  ]
+	].

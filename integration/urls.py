@@ -4,4 +4,6 @@ from . import views
 urlpatterns = [
     path("", views.index, name="index"),
     path("graph", views.rml_mapping, name="rml_mapping"),
+    path("", views.index, name="index"),
+    path("result", views.process, name="process")
 ]
