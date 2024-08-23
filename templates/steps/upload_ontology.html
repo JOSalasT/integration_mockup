@@ -1,4 +1,5 @@
 {% extends 'steps/step_template.html' %}
+{% load static %}
 {% block title %}Data Integration{% endblock %}
 {%  block content %}
     <main id="main">
@@ -8,7 +9,7 @@
                 </header>
                 <form id="msform">
                     <fieldset id="step-1">
-                        <div class="row-cols-3" style="text-align: left">
+                        <div class="row-cols-3" style="margin: 20px ; text-align: left">
                             <label for="ontology">Upload an ontology file</label>
                             <input type="file" id="ontology" class="form-control" style="width: 300px" accept=".csv,.ttl" onchange="read_ontology_file()">
                             <label for="ontology_preview"></label>
@@ -16,10 +17,11 @@
                         </div>
                         <div class="row justify-content-center">
                             <input type="button" id="next-1" name="next" class="next action-button" value="Next" onclick="next_step(this)"/>
+                            <a class="action-button" id="go-to-graph" href={% url 'rml_mapping' %}>RML</a>
                         </div>
                     </fieldset>
                     <fieldset id="step-2">
-                        <div class="form-card">
+                        <div class="form-card" style="margin: 20px ; text-align: left">
                             <div id="sources" class="row">
                                 <div id="source_type_container" class="row">
                                     <div id="type_container" class="row">
@@ -44,6 +46,7 @@
                                         <textarea id="rml_mapping" placeholder="Write your RML mapping rules here." ></textarea>
                                         <label for="rml_upload_button">Or upload an existing RML mapping:</label>
                                         <input id="rml_upload_button" type="file" class="form-control" value="Upload" onchange="readRML(this)">
+                                        <div id="rml-graph-editor"></div>
                                     </div>
                                 </div>
                             </div>
@@ -58,7 +61,7 @@
                         
                     </fieldset>
                     <fieldset id="step-3">
-                        <div class="form-card">
+                        <div class="form-card" style="margin: 20px ; text-align: left">
                             <div class="row">
                                 <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
                                 <select id="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
@@ -74,12 +77,62 @@
                                 <label for="password">Password</label>
                                 <input id="password" type="password">
                                 <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
+                                <label for="forward-system">Choose a materialisation system</label>
+                                <div style="padding: 20px">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                               <label for="RDFox">RDFox</label>
+                                                <input type="radio" id="RDFox" name="system" value="RDFox"> 
+                                            </th>
+                                            <th>
+                                                <label for="Rulewerk">Rulewerk</label>
+                                                <input type="radio" id="Rulewerk" name="system" value="Rulewerk">
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <label for="Ontop">Ontop</label>
+                                                <input type="radio" id="Ontop" name="system" value="Ontop">
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                             <div id="queryContainer" class="row" style="display: none">
                                 <label for="query_text">Input query: </label>
                                 <textarea id="query_text" placeholder="Write your query here."></textarea>
                                 <label for="query_upload_button">Or upload an existing query:</label>
                                 <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
+                                <label for="backward-system">Choose a query rewriting system</label>
+                                <div style="padding: 20px">
+                                    <table>
+                                        <tr>
+                                            <th>
+                                               <label for="Rapid">Rapid</label>
+                                                <input type="radio" id="Rapid" name="system" value="Rapid"> 
+                                            </th>
+                                            <th>
+                                                <label for="Iqaros">Iqaros</label>
+                                                <input type="radio" id="Iqaros" name="system" value="Iqaros">
+                                            </th>
+                                            <th>
+                                                <label for="Graal">Graal</label>
+                                                <input type="radio" id="Graal" name="system" value="Graal">
+                                            </th>
+                                        </tr>
+                                        <tr>
+                                            <th>
+                                                <label for="GQR">GQR</label>
+                                                <input type="radio" id="GQR" name="system" value="GQR">
+                                            </th>
+                                            <th>
+                                                <label for="OntopRW">OntopRW</label>
+                                                <input type="radio" id="OntopRW" name="system" value="OntopRW">
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </div>
                             </div>
                             <div class="row justify-content-center">
                                 <input type="button" id="back-3" name="back" class="back action-button" value="Back" onclick="previous_step(this)">
@@ -91,7 +144,15 @@
                 </form>
             </div>
         </section>
+{#        <div id="toolbox">#}
+{#            <input id="upload-input" type="image" title="upload graph" class="action-button" alt="upload graph">#}
+{#            <input type="image" id="download-input" title="download graph" class="action-button" alt="download graph">#}
+{#            <input type="image" id="delete-graph" title="delete graph" class="action-button" alt="delete graph"> #}
+{#        </div>#}
     </main>
+    <script src="//d3js.org/d3.v3.js" charset="utf-8"></script>
+    <script src="//cdn.jsdelivr.net/filesaver.js/0.1/FileSaver.min.js"></script>
+    <script src="{% static 'js/graph-creator.js' %}"></script>
 <script type="text/javascript">
  let numberOfSources = 1;   
 function add_source() {
