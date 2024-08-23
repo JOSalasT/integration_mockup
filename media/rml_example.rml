@@ -6,11 +6,12 @@
 @prefix : <http://example.org/rules/> .
 @prefix schema: <http://schema.org/> .
 @prefix dbo: <http://dbpedia.org/ontology/> .
-@prefix upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#>
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#> .
 
 :TriplesMap a rr:TriplesMap;
 	rml:logicalSource [
-		rml:source "readings.csv" ;
+		rml:source "{{ readings }}" ;
 		rml:referenceFormulation ql:CSV
 	];
 
@@ -49,7 +50,7 @@
 
 :ExerciseData a rr:TriplesMap;
 	rml:logicalSource [
-		rml:source "data_example.csv" ;
+		rml:source "{{ data_example }}" ;
 		rml:referenceFormulation ql:CSV
 	];
 	

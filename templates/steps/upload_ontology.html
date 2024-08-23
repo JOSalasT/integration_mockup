@@ -7,9 +7,16 @@
             <div class="container" data-aos="fade-up">
                 <header class="section-header"><br/>
                 </header>
-                <form id="msform" method="post" action="/result">
+                <form id="msform" method="POST" enctype="multipart/form-data" action="/result">
                     {%  csrf_token %}
                     <fieldset id="step-1">
+                        <div class="row" style="margin: 20px ; text-align: left">
+                            <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
+                            <select id="integration_type" name="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
+                                <option value="forward">Materialisation</option>
+                                <option value="backward">Query</option>
+                            </select>
+                        </div>
                         <div class="row-cols-3" style="margin: 20px ; text-align: left">
                             <label for="ontology">Upload an ontology file</label>
                             <input type="file" id="ontology" class="form-control" style="width: 300px" accept=".csv,.ttl" onchange="read_ontology_file()">
@@ -42,14 +49,14 @@
                                         <input id="db_password" name="db_password" type="password">
                                         <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
                                     </div>
-                                    <div id="rml_container" class="row">
-                                        <label for="rml_mapping">RML mapping:</label>
-                                        <textarea id="rml_mapping" name="rml_mapping" placeholder="Write your RML mapping rules here." ></textarea>
-                                        <label for="rml_upload_button">Or upload an existing RML mapping:</label>
-                                        <input id="rml_upload_button" type="file" class="form-control" value="Upload" onchange="readRML(this)">
-                                        <div id="rml-graph-editor"></div>
-                                    </div>
                                 </div>
+                            </div>
+                            <div id="rml_container" class="row">
+                                <label for="rml_mapping">RML mapping:</label>
+                                <textarea id="rml_mapping" name="rml_mapping" placeholder="Write your RML mapping rules here." ></textarea>
+                                <label for="rml_upload_button">Or upload an existing RML mapping:</label>
+                                <input id="rml_upload_button" type="file" name="rml_file" class="form-control" value="Upload" onchange="readRML(this)">
+{#                                        <div id="rml-graph-editor"></div>#}
                             </div>
                             <div class="row justify-content-center">
                                 <input type="button" id="add" class="action-button" value="Add source" onclick="add_source()">
@@ -60,13 +67,6 @@
                     </fieldset>
                     <fieldset id="step-3">
                         <div class="form-card" style="margin: 20px ; text-align: left">
-                            <div class="row">
-                                <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
-                                <select id="integration_type" name="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
-                                    <option value="forward">Materialisation</option>
-                                    <option value="backward">Query</option>
-                                </select>
-                            </div>
                             <div id="tripleStore" class="row" style="display: block">
                                 <label for="tripleStore_uri">URI to TripleStore</label>
                                 <input type="url" id="tripleStore_uri" name="tripleStore-uri">
