@@ -8,6 +8,8 @@ from rdflib import Graph
 from tempfile import NamedTemporaryFile
 from urllib.request import pathname2url
 
+from integration_mockup.settings import BASE_DIR
+
 
 def index(request):
     return render(request, 'steps/upload_ontology.html')
@@ -29,24 +31,44 @@ def rml_mapping(request):
     return render(request, 'steps/display_mapping.html')
 
 
+def jarWrapper(*args):
+    print(args)
+    javaProcess = Popen(['java', '-jar'] + list(args), stdout=PIPE, stderr=PIPE)
+    ret = []
+    while javaProcess.poll() is None:
+        line = javaProcess.stdout.readline()
+        line = line.decode('utf-8')
+        if line != '' and line.endswith("\n"):
+            ret.append(line[:-1])
+    stdout, stderr = javaProcess.communicate()
+    ret += stdout.decode('utf-8').split('\n')
+    if stderr != '':
+        ret += stderr.decode('utf-8').split('\n')
+    return ret
+
+
 def process(request):
     if request.method == 'POST':
         ontology = request.POST.get('ontology')
         with request.FILES.get('rml_file') as rml_file:
             temp_rml_file = NamedTemporaryFile(mode='w+', encoding='utf-8', delete=False)
-            for chunk in rml_file.chunks():
-                temp_string = chunk.decode('utf-8')
-                temp_rml_file.write(temp_string)
-            temp_rml_file.close()
+            template_vars = dict()
+            temp_files = []
             for file in request.FILES.getlist('local_source'):
-                temp_file = NamedTemporaryFile()
+                temp_file = NamedTemporaryFile(mode='wb', delete=False)
+                template_vars[file.name[:file.name.rfind(".")]] = pathname2url(temp_file.name)
                 for chunk in file.chunks():
                     temp_file.write(chunk)
-            rml_converter = RMLConverter()
-            rdf_graph = rml_converter.convert(pathname2url("media/rml_example.rml"))
-            rdf_graph = rml_converter.convert(pathname2url(temp_rml_file.name))
-            for s, p, o in rdf_graph:
-                print(str(s) + "," + str(p) + "," + str(o))
+                temp_files.append(temp_file)
+            for chunk in rml_file.chunks():
+                temp_string = chunk.decode('utf-8').replace('\r', '')
+                for key, value in template_vars.items():
+                    temp_string = temp_string.replace("{{ " + key + " }}", value)
+                temp_rml_file.write(temp_string)
+            temp_rml_file.seek(0)
+        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar", "rmlmapper-7.0.0-r374-all.jar")]
+        rml_result = jarWrapper(*java_args)
+        print(rml_result)
         if "data_source" in request.POST:
             for i in range(len(request.POST.get("data_source"))):
                 print("something")
