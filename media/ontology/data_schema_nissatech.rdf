@@ -46,8 +46,11 @@
         <rdfs:domain rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#ExerciseTypes"/>
         <rdfs:range rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#MuscleGroup"/>
     </owl:ObjectProperty>
-    
-
+	
+	<owl:ObjectProperty rdf:about="https://www.upcast-project.eu/upcast-privacyui-vocab#has_instructor">
+        <rdfs:domain rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#User"/>
+        <rdfs:range rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#Instructor"/>
+    </owl:ObjectProperty>
 
     <!-- 
     ///////////////////////////////////////////////////////////////////////////////////////
@@ -84,10 +87,16 @@
     ///////////////////////////////////////////////////////////////////////////////////////
      -->
 
-    
-
 
     <!-- http://mmisw.org/ont/univmemphis/sensor#GPS -->
+	
+	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#User">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
+    </owl:Class>
+	
+	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#Instructor">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
+    </owl:Class>
 
     <owl:Class rdf:about="http://mmisw.org/ont/univmemphis/sensor#GPS">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#DataSource"/>
