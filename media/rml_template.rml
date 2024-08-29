@@ -11,7 +11,7 @@
 
 :TriplesMap a rr:TriplesMap;
 	rml:logicalSource [
-		rml:source "./sources/readings.csv" ;
+		rml:source "{{ readings }}" ;
 		rml:referenceFormulation ql:CSV
 	];
 
@@ -50,7 +50,7 @@
 
 :ExerciseData a rr:TriplesMap;
 	rml:logicalSource [
-		rml:source "./sources/data_example.csv" ;
+		rml:source "{{ data_example }}" ;
 		rml:referenceFormulation ql:CSV
 	];
 	
