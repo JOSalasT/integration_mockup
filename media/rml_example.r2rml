@@ -23,14 +23,14 @@
 	rr:predicateObjectMap [
 	  rr:predicate upcast:has_difficulty_level;
 	  rr:objectMap [
-		rr:column "difficulty_level"
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/difficulty_level/{difficulty_level}"
 	  ]
 	] ;
 
 	rr:predicateObjectMap [
 	  rr:predicate upcast:has_exercise_type;
 	  rr:objectMap [
-		rr:column "exercise_type"
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/exercise_type/{exercise_type}"
 	  ]
 	] .
 
@@ -69,7 +69,7 @@
 	  rr:predicate upcast:has_date_time;
 	  rr:objectMap [
 	   rr:column "start_time" ;
-	   rr:datatype xsd:datetime
+	   rr:datatype xsd:dateTime
 	 ]
 	] .
 	

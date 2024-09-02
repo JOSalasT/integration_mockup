@@ -1,0 +1,25 @@
+{% extends 'steps/step_template.html' %}
+{% load static %}
+{% block title %}Data Integration{% endblock %}
+{%  block content %}
+    <main id="main">
+        <section id="faq" class="faq">
+            <div class="container" data-aos="fade-up">
+                <header class="section-header"><br/>
+                </header>
+                <form id="msform" method="POST" enctype="multipart/form-data" action="/result">
+                    <fieldset id="step-1">
+                        <div class="row" style="margin: 20px ; text-align: left">
+                            <label> These are the results of the query using: {{ system }}
+                                <textarea style="height: 500px">
+                                    {{ results }}
+                                </textarea>
+                            </label>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
+        </section>
+    </main>
+    
+{%  endblock %}

@@ -1,9 +1,8 @@
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab>
 PREFIX : <http://example.com/example.owl#>
-SELECT DISTINCT ?0 
+SELECT DISTINCT ?0
 WHERE
 {
-	?0 rdf:type upcast:User .
-	?0 rdf:type upcast:Instructor .
+	?0 ?p ?o .
 }
