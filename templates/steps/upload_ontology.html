@@ -334,8 +334,17 @@ function previous_step(element) {
             input.setAttribute("id","data_source"+suffix);
             input.setAttribute("name","local_source");
             input.setAttribute("type","file");
+            const schema_label = document.createElement("label");
+            schema_label.setAttribute("for","data_schema"+suffix);
+            schema_label.innerText = "Upload a schema file: ";
+            const schema_input = document.createElement("input");
+            schema_input.setAttribute("id","data_schema"+suffix);
+            schema_input.setAttribute("name","schema");
+            schema_input.setAttribute("type","file");
             inner_source_container.append(label);
             inner_source_container.append(input);
+            inner_source_container.append(schema_label);
+            inner_source_container.append(schema_input);
         }
         else {
             const label = document.createElement("label");

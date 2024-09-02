@@ -9,16 +9,42 @@
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#> .
 
-:TriplesMap a rr:TriplesMap;
-	rml:logicalSource [
-		rml:source "./sources/readings.csv" ;
-		rml:referenceFormulation ql:CSV
-	];
+:ExerciseData a rr:TriplesMap ;
+	rr:logicalTable [
+		rr:tableName "exercises" ;
+		rr:columnFormulation ql:CSV
+	] ;
+	
+	rr:subjectMap [
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/exercise/{id}" ;
+		rr:termType rr:IRI
+	] ;
+
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_difficulty_level;
+	  rr:objectMap [
+		rr:column "difficulty_level"
+	  ]
+	] ;
+
+	rr:predicateObjectMap [
+	  rr:predicate upcast:has_exercise_type;
+	  rr:objectMap [
+		rr:column "exercise_type"
+	  ]
+	] .
+
+:TriplesMap a rr:TriplesMap ;
+	rr:logicalTable [
+		rr:tableName "readings" ;
+		rr:columnFormulation ql:CSV
+	] ;
 
 	rr:subjectMap [
 		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/readings/{id}" ;
+		rr:termType rr:IRI ;
 		rr:class upcast:Reading
-	];
+	] ;
 	
 	rr:predicateObjectMap [
 		rr:predicate upcast:involves_exercise ;
@@ -29,42 +55,42 @@
 				rr:parent "id" ;
 			]
 		]
-	];
+	] ;
 	
 	rr:predicateObjectMap [
 	  rr:predicate upcast:has_value;
 	  rr:objectMap [
-	   rml:reference "value" ;
+	   rr:column "value" ;
 	   rr:datatype xsd:decimal
 	 ]
-	];
+	] ;
 
 	rr:predicateObjectMap [
 	  rr:predicate upcast:has_date_time;
 	  rr:objectMap [
-	   rml:reference "start_time" ;
+	   rr:column "start_time" ;
 	   rr:datatype xsd:datetime
 	 ]
-	].
+	] .
 	
-:Users a rr:TriplesMap;
-	rml:logicalSource [
-		rml:source "./sources/users.csv" ;
-		rml:referenceFormulation ql:CSV
-	];
+:Users a rr:TriplesMap ;
+	rr:logicalTable [
+		rr:tableName "users" ;
+		rr:columnFormulation ql:CSV
+	] ;
 	
 	rr:subjectMap [
 		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/user/{id}" ;
+		rr:termType rr:IRI ;
 		rr:class upcast:User
-	];
+	] ;
 
 	rr:predicateObjectMap [
 	  rr:predicate schema:name;
 	  rr:objectMap [
-		rr:template "{firstname} {lastname}" ;
-		rr:datatype xsd:string
+		rr:template "{firstname} {lastname}"
 	  ]
-	];
+	] ;
 	
 	rr:predicateObjectMap [
 		rr:predicate upcast:has_reading ;
@@ -75,33 +101,9 @@
 				rr:parent "user_id" ;
 			]
 		]
-	];
+	] ;
 	
 	rr:predicateObjectMap [
 		rr:predicate upcast:has_instructor ;
 		rr:objectMap [ rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/user/{instructor_id}" ]
-	].
-
-:ExerciseData a rr:TriplesMap;
-	rml:logicalSource [
-		rml:source "./sources/data_example.csv" ;
-		rml:referenceFormulation ql:CSV
-	];
-	
-	rr:subjectMap [
-		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/exercise/{id}"
-	];
-
-	rr:predicateObjectMap [
-	  rr:predicate upcast:has_difficulty_level;
-	  rr:objectMap [
-		rml:reference "difficulty_level"
-	  ]
-	];
-
-	rr:predicateObjectMap [
-	  rr:predicate upcast:has_exercise_type;
-	  rr:objectMap [
-		rml:reference "exercise_type"
-	  ]
-	].
+	] .

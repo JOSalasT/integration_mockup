@@ -1,0 +1,5 @@
+jdbc.driver=org.postgresql.Driver
+jdbc.url=jdbc:postgresql://localhost/integration_test
+jdbc.user=postgres
+jdbc.password=password
+ontop.existentialReasoning=true
