@@ -317,6 +317,7 @@ def process(request):
             ontology = request.POST.get('ontology')
             writeTextToTemporaryFile(temp_ontology, ontology)
         temp_query = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR)
+        query = ""
         if 'query_text' in request.POST:
             query = request.POST.get('query_text')
             writeTextToTemporaryFile(temp_query, query)
@@ -340,7 +341,6 @@ def process(request):
                         for file in request.FILES.getlist('local_source'):
                             temp_file = copyFileToTemporaryFile(file)
                             table_name = file.name[:file.name.rfind('.')]
-                            table_suffix = file.name.rsplit('.', 1)[1]
                             template_vars[table_name] = temp_file.name
                             temp_files.append(temp_file)
                         for chunk in rml_file.chunks():
@@ -354,17 +354,27 @@ def process(request):
                         rml_result = jarWrapper(*java_args)
                         graph = rdflib.Graph().parse(data=rml_result)
                         graph.serialize(destination=os.path.join(TEMP_DIR,"rml_result.nt"), format='ntriples', encoding='utf-8')
-                        #rulewerk_script = "@source rdf_graph[3]: load-rdf(\"" + os.path.join(TEMP_DIR,"rml_result.ttl") + "\") .\n" + rulewerk_script
-                        rulewerk_script = "@source rdf_graph[3]: load-rdf(\"integration_mockup/temp/rml_result.nt\") .\n" + rulewerk_script
+                        rulewerk_script = "@source rdf_graph[3] : load-rdf(\"integration_mockup/temp/rml_result.nt\") .\n" + rulewerk_script
                         temp_rls_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR,
                                                            suffix=".rls")
                         writeTextToTemporaryFile(temp_rls_file, rulewerk_script)
                         for file in temp_files:
                             file.close()
                             os.remove(file.name)
-                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk", "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name, "--query", "rdf_graph(?S,?P,?O)"]
+                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk", "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name, "--query", "rdf_graph(?S,?P,?O)", "--print-complete-query-result"]
                         rulewerk_result = jarWrapper(*java_args)
-                        print(rulewerk_result)
+                        result_text = ""
+                        for line in rulewerk_result.splitlines():
+                            if line.strip().startswith('- ['):
+                                line = line.replace('- [', '').replace(']', '').replace(',',' ')
+                                result_text += line + " .\n"
+                        graph = rdflib.Graph().parse(data=result_text)
+                        query_results = graph.query(query)
+                        result_text = ""
+                        for q in query_results:
+                            for v in query_results.vars:
+                                result_text += q.get(v) + "\n"
+                        print(result_text)
                         temp_rml_file.close()
                         os.remove(temp_rml_file.name)
                         temp_ontology.close()
@@ -373,6 +383,7 @@ def process(request):
                         os.remove(temp_rls_file.name)
                         temp_query.close()
                         os.remove(temp_query.name)
+                        return render(request, 'steps/query_results.html', {"results": result_text, "system": system})
                 elif system == "Ontop":
                     print("Running Ontop")
                     ontop_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "ontop", "ontop"),
@@ -461,7 +472,7 @@ def process(request):
                         result_text = ""
                         for line in temp_results.readlines():
                             result_text += line
-                        return render(request, 'steps/query_results.html', {"results": result_text, system: system})
+                        return render(request, 'steps/query_results.html', {"results": result_text, "system": system})
                 elif system == "CGQR":
                     print("Running CGQR")
                 else:

@@ -10,22 +10,15 @@
                 <form id="msform" method="POST" enctype="multipart/form-data" action="/result">
                     {%  csrf_token %}
                     <fieldset id="step-1">
-                        <div class="row" style="margin: 20px ; text-align: left">
-                            <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
-                            <select id="integration_type" name="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
-                                <option value="forward">Materialisation</option>
-                                <option value="backward">Query</option>
-                            </select>
-                        </div>
                         <div id="step-1-container" class="row-cols-3" style="margin: 20px ; text-align: left">
-                            <label for="ontology">Upload an ontology file</label>
+                            <label for="ontology">Upload an ontology file for the target</label>
                             <input type="file" id="ontology" class="form-control" style="width: 300px" accept=".csv,.ttl,.rdf,.owl" onchange="read_ontology_file()">
-                            <label for="ontology_preview"></label>
+                            <label for="ontology_preview">Target Ontology:</label>
                             <textarea id="ontology_preview" name="ontology" style="height: 500px" readonly></textarea>
                         </div>
                         <div class="row justify-content-center">
                             <input type="button" id="next-1" name="next" class="next action-button" value="Next" onclick="next_step(this)"/>
-                            <a class="action-button" id="go-to-graph" href={% url 'rml_mapping' %}>RML</a>
+                            {#  <a class="action-button" id="go-to-graph" href={% url 'rml_mapping' %}>RML</a> #}
                         </div>
                     </fieldset>
                     <fieldset id="step-2">
@@ -35,19 +28,16 @@
                                     <div id="type_container" class="row">
                                         <label for="source_type">Choose your source:</label>
                                         <select id="source_type" style="width: 300px" onchange="sourceTypeSelected(this)">
+                                            <option value="local">Upload local source</option>
                                             <option value="db">Connect to DB</option>
                                             <option value="sparql">Connect to SPARQL endpoint</option>
-                                            <option value="local">Upload local source</option>
                                         </select>
                                     </div>
                                     <div id="source_container" class="row">
-                                        <label for="data_source">URI to source:</label>
-                                        <input id="data_source" name="data_source" type="url">
-                                        <label for="db_username">Username</label>
-                                        <input id="db_username" name="db_username" type="text">
-                                        <label for="db_password">Password</label>
-                                        <input id="db_password" name="db_password" type="password">
-                                        <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
+                                        <label for="data_source">Choose a file to upload:</label>
+                                        <input id="data_source" name="local_source" type="file">
+                                        <label for="data_schema">Upload a schema file:</label>
+                                        <input id="data_schema" name="schema" type="file">
                                     </div>
                                 </div>
                             </div>
@@ -81,6 +71,13 @@
                                 <textarea id="query_text" name="query_text" placeholder="Write your query here."></textarea>
                                 <label for="query_upload_button">Or upload an existing query:</label>
                                 <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
+                                <div class="row" style="text-align: left">
+                                    <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
+                                    <select id="integration_type" name="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
+                                        <option value="forward">Materialisation</option>
+                                        <option value="backward">Query</option>
+                                    </select>
+                                </div>
                                 <div id="forward-system" style="display: block">
                                     <label for="forward-system-table">Choose a materialisation system</label>
                                     <table id="forward-system-table">
@@ -163,6 +160,7 @@ function add_source() {
     const container = document.getElementById("sources");
     const data_clone = document.getElementById("source_type_container").cloneNode(true);
     changeIDs(data_clone,numberOfSources);
+    defaultSourceType(data_clone,'-'+numberOfSources.toString())
     numberOfSources += 1;
     container.append(data_clone);
 }
@@ -313,81 +311,29 @@ function previous_step(element) {
         });
     }
     
-    function sourceTypeSelected(param) {
-        const source_container = param.parentElement.parentElement;
-        let suffix = '';
-        if (param.getAttribute("id").indexOf("-") > 0) {
-            suffix = param.getAttribute("id");
-            suffix = suffix.substring(suffix.indexOf("-"));
-        }
-        else {
-            suffix = '';
-        }
-        const source_type = document.getElementById("source_type"+suffix).value;
+    function defaultSourceType(source_container,suffix) {
         const inner_source_container = source_container.querySelector('#source_container'+suffix);
         removeAllChildNodes(inner_source_container);
-        if (source_type === "local") {
-            const label = document.createElement("label");
-            label.setAttribute("for","data_source"+suffix);
-            label.innerText = "Choose a file to upload: ";
-            const input = document.createElement("input");
-            input.setAttribute("id","data_source"+suffix);
-            input.setAttribute("name","local_source");
-            input.setAttribute("type","file");
-            const schema_label = document.createElement("label");
-            schema_label.setAttribute("for","data_schema"+suffix);
-            schema_label.innerText = "Upload a schema file: ";
-            const schema_input = document.createElement("input");
-            schema_input.setAttribute("id","data_schema"+suffix);
-            schema_input.setAttribute("name","schema");
-            schema_input.setAttribute("type","file");
-            inner_source_container.append(label);
-            inner_source_container.append(input);
-            inner_source_container.append(schema_label);
-            inner_source_container.append(schema_input);
-        }
-        else {
-            const label = document.createElement("label");
-            label.setAttribute("for","data_source"+suffix);
-            const input = document.createElement("input");
-            input.setAttribute("id","data_source"+suffix);
-            input.setAttribute("name","data_source");
-            input.setAttribute("type","url");
-            const label1 = document.createElement("label");
-            label1.innerText = "Username";
-            label.setAttribute("for","db_username"+suffix);
-            const input1 = document.createElement("input");
-            input.setAttribute("id","db_username"+suffix);
-            input.setAttribute("type","text");
-            const label2 = document.createElement("label");
-            label2.innerText = "Password";
-            label.setAttribute("for","db_password"+suffix);
-            const input2 = document.createElement("input");
-            input.setAttribute("id","db_password"+suffix);
-            input.setAttribute("type","text");
-            const connect_button = document.createElement("input");
-            connect_button.setAttribute("id","connect_button"+suffix);
-            connect_button.setAttribute("type","button");
-            connect_button.setAttribute("class","action-button");
-            connect_button.setAttribute("onclick","connect_to_db()");
-            connect_button.value = "Connect";
-            if (source_type === "db") {
-                label.innerText = "URI to source: ";
-            }
-            else if (source_type === "sparql") {
-                label.innerText = "URI to SPARQL endpoint: ";
-                connect_button.setAttribute("onclick","connect_to_sparql_endpoint()");
-            }
-            inner_source_container.append(label);
-            inner_source_container.append(input);
-            inner_source_container.append(label1);
-            inner_source_container.append(input1);
-            inner_source_container.append(label2);
-            inner_source_container.append(input2);
-            inner_source_container.append(connect_button);
-        }
+        const label = document.createElement("label");
+        label.setAttribute("for","data_source"+suffix);
+        label.innerText = "Choose a file to upload: ";
+        const input = document.createElement("input");
+        input.setAttribute("id","data_source"+suffix);
+        input.setAttribute("name","local_source");
+        input.setAttribute("type","file");
+        const schema_label = document.createElement("label");
+        schema_label.setAttribute("for","data_schema"+suffix);
+        schema_label.innerText = "Upload a schema file: ";
+        const schema_input = document.createElement("input");
+        schema_input.setAttribute("id","data_schema"+suffix);
+        schema_input.setAttribute("name","schema");
+        schema_input.setAttribute("type","file");
+        inner_source_container.append(label);
+        inner_source_container.append(input);
+        inner_source_container.append(schema_label);
+        inner_source_container.append(schema_input);
     }
-    
+
     function next_step(element) {
         const previous_step = parseInt(element.id.split("-")[1]);
         const current_step = previous_step + 1;
@@ -397,14 +343,89 @@ function previous_step(element) {
         current_fs.setAttribute("style","display: block");
         console.log(current_fs);
     }
-    
+
     function connect_to_db() {
         var uri = document.getElementById("data_source").value;
     }
-    
+
     function connect_to_sparql_endpoint() {
         var uri = document.getElementById("data_source").value;
     }
+
+function sourceTypeSelected(param) {
+    let suffix = '';
+    if (param.getAttribute("id").indexOf("-") > 0) {
+        suffix = param.getAttribute("id");
+        suffix = suffix.substring(suffix.indexOf("-"));
+    }
+    else {
+        suffix = '';
+    }
+    let source_container = param.parentElement.parentElement;
+    const source_type = document.getElementById("source_type"+suffix).value;
+    const inner_source_container = source_container.querySelector('#source_container'+suffix);
+    removeAllChildNodes(inner_source_container);
+    if (source_type === "local") {
+        const label = document.createElement("label");
+        label.setAttribute("for","data_source"+suffix);
+        label.innerText = "Choose a file to upload: ";
+        const input = document.createElement("input");
+        input.setAttribute("id","data_source"+suffix);
+        input.setAttribute("name","local_source");
+        input.setAttribute("type","file");
+        const schema_label = document.createElement("label");
+        schema_label.setAttribute("for","data_schema"+suffix);
+        schema_label.innerText = "Upload a schema file: ";
+        const schema_input = document.createElement("input");
+        schema_input.setAttribute("id","data_schema"+suffix);
+        schema_input.setAttribute("name","schema");
+        schema_input.setAttribute("type","file");
+        inner_source_container.append(label);
+        inner_source_container.append(input);
+        inner_source_container.append(schema_label);
+        inner_source_container.append(schema_input);
+    }
+    else {
+        const label = document.createElement("label");
+        label.setAttribute("for","data_source"+suffix);
+        const input = document.createElement("input");
+        input.setAttribute("id","data_source"+suffix);
+        input.setAttribute("name","data_source");
+        input.setAttribute("type","url");
+        const label1 = document.createElement("label");
+        label1.innerText = "Username";
+        label.setAttribute("for","db_username"+suffix);
+        const input1 = document.createElement("input");
+        input.setAttribute("id","db_username"+suffix);
+        input.setAttribute("type","text");
+        const label2 = document.createElement("label");
+        label2.innerText = "Password";
+        label.setAttribute("for","db_password"+suffix);
+        const input2 = document.createElement("input");
+        input.setAttribute("id","db_password"+suffix);
+        input.setAttribute("type","text");
+        const connect_button = document.createElement("input");
+        connect_button.setAttribute("id","connect_button"+suffix);
+        connect_button.setAttribute("type","button");
+        connect_button.setAttribute("class","action-button");
+        connect_button.setAttribute("onclick","connect_to_db()");
+        connect_button.value = "Connect";
+        if (source_type === "db") {
+            label.innerText = "URI to source: ";
+        }
+        else if (source_type === "sparql") {
+            label.innerText = "URI to SPARQL endpoint: ";
+            connect_button.setAttribute("onclick","connect_to_sparql_endpoint()");
+        }
+        inner_source_container.append(label);
+        inner_source_container.append(input);
+        inner_source_container.append(label1);
+        inner_source_container.append(input1);
+        inner_source_container.append(label2);
+        inner_source_container.append(input2);
+        inner_source_container.append(connect_button);
+    }
+}
     
     var current_fs, next_fs, previous_fs; //fieldsets
                 var opacity;
