@@ -67,15 +67,21 @@
                     </fieldset>
                     <fieldset id="step-3">
                         <div class="form-card" style="margin: 20px ; text-align: left">
-                            <div id="tripleStore" class="row" style="display: block">
-                                <label for="tripleStore_uri">URI to TripleStore</label>
-                                <input type="url" id="tripleStore_uri" name="tripleStore-uri">
-                                <label for="username">Username</label>
-                                <input id="username" name="username" type="text">
-                                <label for="password">Password</label>
-                                <input id="password" name="password" type="password">
-                                <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">
-                                <div id="forward-system">
+                            <div id="tripleStore" class="row" style="display: none">
+{#                                <label for="tripleStore_uri">URI to TripleStore</label>#}
+{#                                <input type="url" id="tripleStore_uri" name="tripleStore-uri">#}
+{#                                <label for="username">Username</label>#}
+{#                                <input id="username" name="username" type="text">#}
+{#                                <label for="password">Password</label>#}
+{#                                <input id="password" name="password" type="password">#}
+{#                                <input id="connect_button" type="button" class="action-button" value="Connect" onclick="connect_to_db()">#}
+                            </div>
+                            <div id="queryContainer" class="row" style="display: block">
+                                <label for="query_text">Input query: </label>
+                                <textarea id="query_text" name="query_text" placeholder="Write your query here."></textarea>
+                                <label for="query_upload_button">Or upload an existing query:</label>
+                                <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
+                                <div id="forward-system" style="display: block">
                                     <label for="forward-system-table">Choose a materialisation system</label>
                                     <table id="forward-system-table">
                                         <tr>
@@ -93,13 +99,7 @@
                                         </tr>
                                     </table>
                                 </div>
-                            </div>
-                            <div id="queryContainer" class="row" style="display: none">
-                                <label for="query_text">Input query: </label>
-                                <textarea id="query_text" name="query_text" placeholder="Write your query here."></textarea>
-                                <label for="query_upload_button">Or upload an existing query:</label>
-                                <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
-                                <div id="backward-system">
+                                <div id="backward-system" style="display: none">
                                     <label for="backward-system-table">Choose a query rewriting system</label>
                                     <table id="backward-system-table">
                                         <tr>
@@ -205,20 +205,20 @@ function submitForm() {
     }
     var integration_type = document.getElementById("integration_type").value;
     if (integration_type === "forward") {
-        var tripleStore = document.getElementById("tripleStore_uri").value;
-        var username = document.getElementById("username").value;
-        var password = document.getElementById("password").value;
-        if (tripleStore === "") {
-            console.warn("URI missing for triple store.")
-        }
-        if (username === "") {
-                console.warn("Empty username for triple store.");
-                correct = false;
-        }
-        if (password === "") {
-            console.warn("Empty password for triple store.");
-            correct = false;
-        }
+        {#var tripleStore = document.getElementById("tripleStore_uri").value;#}
+        {#var username = document.getElementById("username").value;#}
+        {#var password = document.getElementById("password").value;#}
+        {#if (tripleStore === "") {#}
+        {#    console.warn("URI missing for triple store.")#}
+
+        {#if (username === "") {#}
+        {#        console.warn("Empty username for triple store.");#}
+        {#        correct = false;#}
+  
+        {#if (password === "") {#}
+        {#    console.warn("Empty password for triple store.");#}
+        {#    correct = false;#}
+ 
     }
     else if (integration_type === "backward") {
         var query = document.getElementById("query_text").innerText;
@@ -283,13 +283,13 @@ function previous_step(element) {
         const option = document.getElementById("integration_type").value;
         if (option === "forward") {
             document.getElementById("next-3").value = "Materialise";
-            document.getElementById("tripleStore").setAttribute("style","display: block");
-            document.getElementById("queryContainer").setAttribute("style","display: none");
+            document.getElementById("forward-system").setAttribute("style","display: block");
+            document.getElementById("backward-system").setAttribute("style","display: none");
         }
         else if (option === "backward") {
             document.getElementById("next-3").value = "Run query";
-            document.getElementById("tripleStore").setAttribute("style","display: none");
-            document.getElementById("queryContainer").setAttribute("style","display: block");
+            document.getElementById("forward-system").setAttribute("style","display: none");
+            document.getElementById("backward-system").setAttribute("style","display: block");
         }
     }
     
