@@ -72,10 +72,10 @@
                                 <label for="query_upload_button">Or upload an existing query:</label>
                                 <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
                                 <div class="row" style="text-align: left">
-                                    <label for="integration_type">Choose whether to materialise new data or query all sources.</label>
+                                    <label for="integration_type">Choose whether to query by materialising new data or rewriting the query.</label>
                                     <select id="integration_type" name="integration_type" onchange="integrationTypeSelected()" style="width: 300px">
-                                        <option value="forward">Materialisation</option>
-                                        <option value="backward">Query</option>
+                                        <option value="forward">Materialise</option>
+                                        <option value="backward">Rewrite Query</option>
                                     </select>
                                 </div>
                                 <div id="forward-system" style="display: block">
@@ -121,7 +121,7 @@
                                                 </label>
                                             </th>
                                             <th>
-                                                <label>OntopRW
+                                                <label>Ontop
                                                     <input type="radio" id="OntopRW" name="system" value="OntopRW">
                                                 </label>
                                             </th>
