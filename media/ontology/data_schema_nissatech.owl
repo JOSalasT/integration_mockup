@@ -98,6 +98,10 @@
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
     </owl:Class>
 
+	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#Cat">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
+    </owl:Class>
+
     <owl:Class rdf:about="http://mmisw.org/ont/univmemphis/sensor#GPS">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#DataSource"/>
     </owl:Class>
