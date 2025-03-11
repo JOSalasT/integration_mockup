@@ -84,7 +84,7 @@
 
 :ExerciseData a rr:TriplesMap;
 	rml:logicalSource [
-		rml:source "./sources/data_example.csv" ;
+		rml:source "./sources/exercises.csv" ;
 		rml:referenceFormulation ql:CSV
 	];
 	

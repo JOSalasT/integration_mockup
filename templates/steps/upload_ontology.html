@@ -43,7 +43,7 @@
                             </div>
                             <div id="rml_container" class="row">
                                 <label for="rml_mapping">RML mapping:</label>
-                                <textarea id="rml_mapping" name="rml_mapping" placeholder="Write your RML mapping rules here." ></textarea>
+                                <textarea id="rml_mapping" name="rml_mapping" placeholder="Write your RML mapping rules here." style="height: 500px"></textarea>
                                 <label for="rml_upload_button">Or upload an existing RML mapping:</label>
                                 <input id="rml_upload_button" type="file" name="rml_file" class="form-control" value="Upload" onchange="readRML(this)">
 {#                                        <div id="rml-graph-editor"></div>#}
@@ -68,7 +68,7 @@
                             </div>
                             <div id="queryContainer" class="row" style="display: block">
                                 <label for="query_text">Input query: </label>
-                                <textarea id="query_text" name="query_text" placeholder="Write your query here."></textarea>
+                                <textarea id="query_text" name="query_text" placeholder="Write your query here." style="height: 500px"></textarea>
                                 <label for="query_upload_button">Or upload an existing query:</label>
                                 <input id="query_upload_button" type="file" class="form-control" value="Upload" onchange="readQuery()">
                                 <div class="row" style="text-align: left">
@@ -222,6 +222,9 @@ function submitForm() {
         var query = document.getElementById("query_text").innerText;
     }
     if (correct) {
+        for (const node in document.getElementsByName("data_source")){
+            
+        }
         document.getElementById("msform").submit()
     }
 }
@@ -385,6 +388,52 @@ function sourceTypeSelected(param) {
         inner_source_container.append(schema_label);
         inner_source_container.append(schema_input);
     }
+    else if (source_type === "sparql") {
+        const label = document.createElement("label");
+        label.setAttribute("for","data_source"+suffix);
+        const input = document.createElement("input");
+        input.setAttribute("id","data_source"+suffix);
+        input.setAttribute("name","data_source");
+        input.setAttribute("type","url");
+        const label1 = document.createElement("label");
+        label1.innerText = "Username";
+        label1.setAttribute("for","db_username"+suffix);
+        const input1 = document.createElement("input");
+        input1.setAttribute("id","db_username"+suffix);
+        input1.setAttribute("name","db_username");
+        input1.setAttribute("type","text");
+        const label2 = document.createElement("label");
+        label2.innerText = "Password";
+        label2.setAttribute("for","db_password"+suffix);
+        const input2 = document.createElement("input");
+        input2.setAttribute("id","db_password"+suffix);
+        input2.setAttribute("name","db_password");
+        input2.setAttribute("type","text");
+        const label3 = document.createElement("label");
+        label3.innerText = "Query";
+        label3.setAttribute("for","sparql_query"+suffix);
+        const input3 = document.createElement("input");
+        input3.setAttribute("id","sparql_query"+suffix);
+        input3.setAttribute("name","sparql_query");
+        input3.setAttribute("type","textarea");
+        const connect_button = document.createElement("input");
+        connect_button.setAttribute("id","connect_button"+suffix);
+        connect_button.setAttribute("type","button");
+        connect_button.setAttribute("class","action-button");
+        connect_button.setAttribute("onclick","connect_to_db()");
+        connect_button.value = "Connect";
+        label.innerText = "URI to SPARQL endpoint: ";
+        connect_button.setAttribute("onclick","connect_to_sparql_endpoint()");
+        inner_source_container.append(label);
+        inner_source_container.append(input);
+        inner_source_container.append(label1);
+        inner_source_container.append(input1);
+        inner_source_container.append(label2);
+        inner_source_container.append(input2);
+        inner_source_container.append(label3);
+        inner_source_container.append(input3);
+        inner_source_container.append(connect_button);
+    }
     else {
         const label = document.createElement("label");
         label.setAttribute("for","data_source"+suffix);
@@ -394,16 +443,18 @@ function sourceTypeSelected(param) {
         input.setAttribute("type","url");
         const label1 = document.createElement("label");
         label1.innerText = "Username";
-        label.setAttribute("for","db_username"+suffix);
+        label1.setAttribute("for","db_username"+suffix);
         const input1 = document.createElement("input");
-        input.setAttribute("id","db_username"+suffix);
-        input.setAttribute("type","text");
+        input1.setAttribute("id","db_username"+suffix);
+        input1.setAttribute("name","db_username");
+        input1.setAttribute("type","text");
         const label2 = document.createElement("label");
         label2.innerText = "Password";
-        label.setAttribute("for","db_password"+suffix);
+        label2.setAttribute("for","db_password"+suffix);
         const input2 = document.createElement("input");
-        input.setAttribute("id","db_password"+suffix);
-        input.setAttribute("type","text");
+        input2.setAttribute("id","db_password"+suffix);
+        input2.setAttribute("name","db_password");
+        input2.setAttribute("type","text");
         const connect_button = document.createElement("input");
         connect_button.setAttribute("id","connect_button"+suffix);
         connect_button.setAttribute("type","button");

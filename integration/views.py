@@ -246,10 +246,13 @@ def ontology_to_RLS_with_triples(ontology_file):
         for object_property in graph.subjects(rdflib.RDF.type, rdflib.OWL.ObjectProperty):
             property_domain = graph.objects(object_property, rdflib.RDFS.domain)
             for domain in property_domain:
-                tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(domain) + "\') :- rdf_graph(?X,\'" + str(object_property) + "\',?Y) .")
+                tgds.append(
+                    "rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(domain) + "\') :- rdf_graph(?X,\'" + str(
+                        object_property) + "\',?Y) .")
             property_ranges = graph.objects(object_property, rdflib.RDFS.range)
             for property_range in property_ranges:
-                tgds.append("rdf_graph(?Y,\'" + str(rdflib.RDF.type) + "\',\'" + str(property_range) + "\') :- rdf_graph(?X,\'" + str(
+                tgds.append("rdf_graph(?Y,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                    property_range) + "\') :- rdf_graph(?X,\'" + str(
                     object_property) + "\',?Y) .")
             subproperties = graph.objects(object_property, rdflib.RDFS.subPropertyOf)
             for subproperty in subproperties:
@@ -264,7 +267,9 @@ def ontology_to_RLS_with_triples(ontology_file):
                         tgds.append("rdf_graph(?X,\'" + str(property_name) + "\',!Z) :- rdf_graph(?X,\'" + str(
                             class_property) + "\',?Y) .")
                 else:
-                    tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(class_subclass) + "\') :- rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(class_property) + "\') .")
+                    tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                        class_subclass) + "\') :- rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                        class_property) + "\') .")
         return tgds
     except ParserError as e:
         print(e)
@@ -304,23 +309,27 @@ def rulewerkImportString(file_list, schema_list):
         table_suffix = file.name.rsplit('.', 1)[1]
         temp_files.append(temp_file)
         if table_suffix == "csv":
-            ans += "@source " + table_name + "[" + str(schema_map[table_name]) + "]" + " : load-csv(\"" + temp_file.name + "\") .\n"
+            ans += "@source " + table_name + "[" + str(
+                schema_map[table_name]) + "]" + " : load-csv(\"" + temp_file.name + "\") .\n"
     print(ans)
     return temp_files, ans
 
+
 def process(request):
     if request.method == 'POST':
-        temp_ontology = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
-                                           dir=TEMP_DIR,
-                                           suffix=".owl")  # TODO Need to support other formats e.g. Turtle, NTriples
+        temp_ontology_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
+                                                dir=TEMP_DIR,
+                                                suffix=".owl")  # TODO Need to support other formats e.g. Turtle, NTriples
         if 'ontology' in request.POST:
             ontology = request.POST.get('ontology')
-            writeTextToTemporaryFile(temp_ontology, ontology)
-        temp_query = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR)
-        query = ""
+            writeTextToTemporaryFile(temp_ontology_file, ontology)
+        temp_query_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR)
+        query = "SELECT * WHERE { ?s ?p ?o }"
         if 'query_text' in request.POST:
             query = request.POST.get('query_text')
-            writeTextToTemporaryFile(temp_query, query)
+            if query == "":
+                query = "SELECT * WHERE { ?s ?p ?o }"
+            writeTextToTemporaryFile(temp_query_file, query)
         if "system" in request.POST:
             system = request.POST.get('system')
             if request.POST.get('integration_type') == "forward":
@@ -328,10 +337,11 @@ def process(request):
                     print("Running RDFox")
                 elif system == "Rulewerk":
                     print("Running Rulewerk")
-                    ontology_tgds = ontology_to_RLS_with_triples(temp_ontology)
+                    ontology_tgds = ontology_to_RLS_with_triples(temp_ontology_file)
                     with (request.FILES.get('rml_file') as rml_file):
                         extension = "." + rml_file.name.rsplit('.', 1)[1]
-                        temp_rml_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR,
+                        temp_rml_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
+                                                           dir=TEMP_DIR,
                                                            suffix=extension)
                         template_vars = dict()
                         temp_files = []
@@ -349,24 +359,29 @@ def process(request):
                                 temp_string = temp_string.replace("{{ " + key + " }}", value)
                             temp_rml_file.write(temp_string)
                         temp_rml_file.seek(0)
-                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar", "rmlmapper-7.0.0-r374-all.jar"),
+                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
+                                                  "rmlmapper-7.0.0-r374-all.jar"),
                                      "-m", temp_rml_file.name]
                         rml_result = jarWrapper(*java_args)
                         graph = rdflib.Graph().parse(data=rml_result)
-                        graph.serialize(destination=os.path.join(TEMP_DIR,"rml_result.nt"), format='ntriples', encoding='utf-8')
+                        graph.serialize(destination=os.path.join(TEMP_DIR, "rml_result.nt"), format='ntriples',
+                                        encoding='utf-8')
                         rulewerk_script = "@source rdf_graph[3] : load-rdf(\"integration_mockup/temp/rml_result.nt\") .\n" + rulewerk_script
-                        temp_rls_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR,
+                        temp_rls_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
+                                                           dir=TEMP_DIR,
                                                            suffix=".rls")
                         writeTextToTemporaryFile(temp_rls_file, rulewerk_script)
                         for file in temp_files:
                             file.close()
                             os.remove(file.name)
-                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk", "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name, "--query", "rdf_graph(?S,?P,?O)", "--print-complete-query-result"]
+                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
+                                                  "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name,
+                                     "--query", "rdf_graph(?S,?P,?O)", "--print-complete-query-result"]
                         rulewerk_result = jarWrapper(*java_args)
                         result_text = ""
                         for line in rulewerk_result.splitlines():
                             if line.strip().startswith('- ['):
-                                line = line.replace('- [', '').replace(']', '').replace(',',' ')
+                                line = line.replace('- [', '').replace(']', '').replace(',', ' ')
                                 result_text += line + " .\n"
                         graph = rdflib.Graph().parse(data=result_text)
                         query_results = graph.query(query)
@@ -374,15 +389,29 @@ def process(request):
                         for q in query_results:
                             for v in query_results.vars:
                                 result_text += q.get(v) + "\n"
-                        print(result_text)
                         temp_rml_file.close()
+                        docker_string = """FROM java:8-jdk
+                        WORKDIR /usr/src/dex
+                        COPY {0}
+                        COPY {1}
+                        COPY {2}
+                        COPY {3}
+                        CMD[\"java\",\"-jar\",\"./rulewerk-client-0.10.0.jar\",\"--rule-file\",./{4},\"rdf_graph(?s,?p,?o)\",\"--print-complete-query-result\"]
+                        """.format(os.path.join(TEMP_DIR, temp_ontology_file.name),
+                                   os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
+                                                "rulewerk-client-0.10.0.jar"),
+                                   os.path.join(TEMP_DIR, temp_rml_file.name),
+                                   os.path.join(TEMP_DIR, temp_rls_file.name),
+                                   temp_rls_file.name,
+                                   os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
+                                                "rulewerk-client-0.10.0.jar"))
                         os.remove(temp_rml_file.name)
-                        temp_ontology.close()
-                        os.remove(temp_ontology.name)
+                        temp_ontology_file.close()
+                        os.remove(temp_ontology_file.name)
                         temp_rls_file.close()
                         os.remove(temp_rls_file.name)
-                        temp_query.close()
-                        os.remove(temp_query.name)
+                        temp_query_file.close()
+                        os.remove(temp_query_file.name)
                         return render(request, 'steps/query_results.html', {"results": result_text, "system": system})
                 elif system == "Ontop":
                     print("Running Ontop")
@@ -454,7 +483,8 @@ def process(request):
                                                           suffix=".csv")
                         ontop_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "ontop",
                                                    "ontop.bat"), "query", "-m", pathForOntop(temp_rml_file.name), "-t",
-                                      pathForOntop(temp_ontology.name), "-q", pathForOntop(temp_query.name), "-p",
+                                      pathForOntop(temp_ontology_file.name), "-q", pathForOntop(temp_query_file.name),
+                                      "-p",
                                       "integration_mockup/static/systems/ontop/properties.txt", "-o",
                                       pathForOntop(temp_results.name)
                                       ]
@@ -466,9 +496,9 @@ def process(request):
                             os.remove(file.name)
                         temp_rml_file.close()
                         os.remove(temp_rml_file.name)
-                        temp_ontology.close()
-                        os.remove(temp_ontology.name)
-                        temp_query.close()
+                        temp_ontology_file.close()
+                        os.remove(temp_ontology_file.name)
+                        temp_query_file.close()
                         result_text = ""
                         for line in temp_results.readlines():
                             result_text += line
@@ -477,8 +507,8 @@ def process(request):
                     print("Running CGQR")
                 else:
                     print("Unknown system")
-                temp_query.close()
-                os.remove(temp_query.name)
+                temp_query_file.close()
+                os.remove(temp_query_file.name)
             else:
                 print(request.POST.get('integration_type'))
 
