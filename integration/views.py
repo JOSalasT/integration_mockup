@@ -10,6 +10,7 @@ from django.db import connection
 from rdflib import Graph
 from tempfile import NamedTemporaryFile
 import pathlib
+import sqlvalidator
 
 from rdflib.exceptions import ParserError
 
@@ -78,6 +79,20 @@ def fileToString(file):
 
 def pathForOntop(filename):
     return pathlib.Path(filename).relative_to(BASE_DIR).as_posix()
+
+
+def checkQuerySyntax(query_text):
+    try:
+        sql_query = sqlvalidator.parse(query_text)
+        return {sql_query: "sql "}
+    except ParserError:
+        print("Tried to parse as SQL query")
+    try:
+        sparql = rdflib.plugins.sparql.prepareQuery(query_text)
+        return {sparql: "sparql "}
+    except ParserError:
+        print("Tried to parse as SPARQL query")
+    return {query_text: "datalog"}
 
 
 # def process(request):
@@ -246,10 +261,13 @@ def ontology_to_RLS_with_triples(ontology_file):
         for object_property in graph.subjects(rdflib.RDF.type, rdflib.OWL.ObjectProperty):
             property_domain = graph.objects(object_property, rdflib.RDFS.domain)
             for domain in property_domain:
-                tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(domain) + "\') :- rdf_graph(?X,\'" + str(object_property) + "\',?Y) .")
+                tgds.append(
+                    "rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(domain) + "\') :- rdf_graph(?X,\'" + str(
+                        object_property) + "\',?Y) .")
             property_ranges = graph.objects(object_property, rdflib.RDFS.range)
             for property_range in property_ranges:
-                tgds.append("rdf_graph(?Y,\'" + str(rdflib.RDF.type) + "\',\'" + str(property_range) + "\') :- rdf_graph(?X,\'" + str(
+                tgds.append("rdf_graph(?Y,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                    property_range) + "\') :- rdf_graph(?X,\'" + str(
                     object_property) + "\',?Y) .")
             subproperties = graph.objects(object_property, rdflib.RDFS.subPropertyOf)
             for subproperty in subproperties:
@@ -264,7 +282,9 @@ def ontology_to_RLS_with_triples(ontology_file):
                         tgds.append("rdf_graph(?X,\'" + str(property_name) + "\',!Z) :- rdf_graph(?X,\'" + str(
                             class_property) + "\',?Y) .")
                 else:
-                    tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(class_subclass) + "\') :- rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(class_property) + "\') .")
+                    tgds.append("rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                        class_subclass) + "\') :- rdf_graph(?X,\'" + str(rdflib.RDF.type) + "\',\'" + str(
+                        class_property) + "\') .")
         return tgds
     except ParserError as e:
         print(e)
@@ -304,9 +324,11 @@ def rulewerkImportString(file_list, schema_list):
         table_suffix = file.name.rsplit('.', 1)[1]
         temp_files.append(temp_file)
         if table_suffix == "csv":
-            ans += "@source " + table_name + "[" + str(schema_map[table_name]) + "]" + " : load-csv(\"" + temp_file.name + "\") .\n"
+            ans += "@source " + table_name + "[" + str(
+                schema_map[table_name]) + "]" + " : load-csv(\"" + temp_file.name + "\") .\n"
     print(ans)
     return temp_files, ans
+
 
 def process(request):
     if request.method == 'POST':
@@ -331,7 +353,8 @@ def process(request):
                     ontology_tgds = ontology_to_RLS_with_triples(temp_ontology)
                     with (request.FILES.get('rml_file') as rml_file):
                         extension = "." + rml_file.name.rsplit('.', 1)[1]
-                        temp_rml_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR,
+                        temp_rml_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
+                                                           dir=TEMP_DIR,
                                                            suffix=extension)
                         template_vars = dict()
                         temp_files = []
@@ -349,24 +372,29 @@ def process(request):
                                 temp_string = temp_string.replace("{{ " + key + " }}", value)
                             temp_rml_file.write(temp_string)
                         temp_rml_file.seek(0)
-                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar", "rmlmapper-7.0.0-r374-all.jar"),
+                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
+                                                  "rmlmapper-7.0.0-r374-all.jar"),
                                      "-m", temp_rml_file.name]
                         rml_result = jarWrapper(*java_args)
                         graph = rdflib.Graph().parse(data=rml_result)
-                        graph.serialize(destination=os.path.join(TEMP_DIR,"rml_result.nt"), format='ntriples', encoding='utf-8')
+                        graph.serialize(destination=os.path.join(TEMP_DIR, "rml_result.nt"), format='ntriples',
+                                        encoding='utf-8')
                         rulewerk_script = "@source rdf_graph[3] : load-rdf(\"integration_mockup/temp/rml_result.nt\") .\n" + rulewerk_script
-                        temp_rls_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False, dir=TEMP_DIR,
+                        temp_rls_file = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
+                                                           dir=TEMP_DIR,
                                                            suffix=".rls")
                         writeTextToTemporaryFile(temp_rls_file, rulewerk_script)
                         for file in temp_files:
                             file.close()
                             os.remove(file.name)
-                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk", "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name, "--query", "rdf_graph(?S,?P,?O)", "--print-complete-query-result"]
+                        java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
+                                                  "rulewerk-client-0.10.0.jar"), "--rule-file", temp_rls_file.name,
+                                     "--query", "rdf_graph(?S,?P,?O)", "--print-complete-query-result"]
                         rulewerk_result = jarWrapper(*java_args)
                         result_text = ""
                         for line in rulewerk_result.splitlines():
                             if line.strip().startswith('- ['):
-                                line = line.replace('- [', '').replace(']', '').replace(',',' ')
+                                line = line.replace('- [', '').replace(']', '').replace(',', ' ')
                                 result_text += line + " .\n"
                         graph = rdflib.Graph().parse(data=result_text)
                         query_results = graph.query(query)
