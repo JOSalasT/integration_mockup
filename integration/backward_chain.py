@@ -1,4 +1,5 @@
 import os
+import re
 import sys
 
 import psycopg2
@@ -200,8 +201,38 @@ def rulewerkImportString(file_list, schema_list):
     print(ans)
 
 def query_predicates_map(query_string):
-    return
+    term_map = dict()
+    prefix_map = dict()
+    # Find all declared prefixes.
+    prefix_terms = re.findall(r"""(?i)\b(?:PREFIX|prefix) (\w+):\s+<((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,4}/)(?:[^\s()<>]+|\((?:[^\s()<>]+|\([^\s()<>]+\))*\))+(?:\((?:[^\s()<>]+|\([^\s()<>]+\))*\)|[^\s`!()\[\]{};:'"., !=?«»“”‘’]))>""",query_string)
+    # Find all IRIs and prefixes + suffixes in the query.
+    terms = re.findall(r"""(?i)\b((?:[a-z][\w-]+:(?:/{1,3}|[a-z0-9%])|www\d{0,3}[.]|[a-z0-9.\-]+[.][a-z]{2,
+    4}/)(?:[^\s()<>]+|\((?:[^\s()<>]+|\([^\s()<>]+\))*\))+(?:\((?:[^\s()<>]+|\([^\s()<>]+\))*\)|[^\s`!()\[\]{};:'".,
+    <>?«»“”‘’]))""", query_string)
+    for prefix in prefix_terms:
+        prefix_map[prefix[0]] = prefix[1]
+    for term in terms:
+        split_term = re.split(r"\W", term)
+        predicate_name = split_term[-1]
+        if not predicate_name == "":
+            if split_term[0] in prefix_map:
+                term_map[predicate_name] = prefix_map[split_term[0]] + predicate_name
+            else:
+                term_map[predicate_name] = term
+    return term_map
 
+predicates_to_iri = query_predicates_map("""PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dc:   <http://purl.org/dc/elements/1.1/>
+PREFIX :     <http://example/ns#>
+
+SELECT ?book ?title
+WHERE
+{ ?t rdf:subject    ?book  .
+  ?t rdf:predicate  dc:title .
+  ?t rdf:object     ?title .
+  ?t :saidBy        "Bob" .
+  ?t <http://example/ns#saidTo> "Alice" .
+}""")
 
 ontology_file = open("ontology.rdf")
 query = ""
@@ -229,6 +260,10 @@ java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
                           "rmlmapper-7.0.0-r374-all.jar"),
              "-m", rml_file.name]
 rml_result = jarWrapper(*java_args)
+java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
+                          "tw-rewriting.jar"),
+             "ontology.rdf", "query"]
+tw_rewriting_result = jarWrapper(*java_args)
 graph += rdflib.Graph().parse(data=rml_result)
 connection = psycopg2.connect(database="postgres", user="postgres", password="", host="localhost", port="5432")
 with connection.cursor() as cursor:
