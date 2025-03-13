@@ -17,10 +17,15 @@ from rdflib.exceptions import ParserError
 
 BASE_DIR = "."
 TEMP_DIR = "."
+JAVA_8_HOME = os.path.join(BASE_DIR, "integration_mockup", "static", "java", "jre", "bin", "java")
 
 
 def jarWrapper(*args):
     javaProcess = run(['java', '-jar'] + list(args), stdin=PIPE, stdout=PIPE, stderr=PIPE)
+    return javaProcess.stdout.decode('utf-8')
+
+def jar8Wrapper(*args):
+    javaProcess = run([JAVA_8_HOME, '-jar'] + list(args), stdin=PIPE, stdout=PIPE, stderr=PIPE)
     return javaProcess.stdout.decode('utf-8')
 
 
@@ -221,22 +226,37 @@ def query_predicates_map(query_string):
                 term_map[predicate_name] = term
     return term_map
 
+# predicates_to_iri = query_predicates_map("""PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+# PREFIX dc:   <http://purl.org/dc/elements/1.1/>
+# PREFIX :     <http://example/ns#>
+#
+# SELECT ?book ?title
+# WHERE
+# { ?t rdf:subject    ?book  .
+#   ?t rdf:predicate  dc:title .
+#   ?t rdf:object     ?title .
+#   ?t :saidBy        "Bob" .
+#   ?t <http://example/ns#saidTo> "Alice" .
+# }""")
+
 predicates_to_iri = query_predicates_map("""PREFIX rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dc:   <http://purl.org/dc/elements/1.1/>
 PREFIX :     <http://example/ns#>
+PREFIX dpv: <http://www.w3.org/ns/dpv#>
+PREFIX upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#>
 
-SELECT ?book ?title
+SELECT ?entity ?label
 WHERE
-{ ?t rdf:subject    ?book  .
-  ?t rdf:predicate  dc:title .
-  ?t rdf:object     ?title .
-  ?t :saidBy        "Bob" .
-  ?t <http://example/ns#saidTo> "Alice" .
-}""")
+{ ?entity a upcast:Resource  .
+  ?entity rdf:label ?label .
+} """)
 
-ontology_file = open("ontology.rdf")
+ontology_path = os.path.join(BASE_DIR, "media", "ontology", "data_schema_nissatech.owl")
+query_path = os.path.join(BASE_DIR, "media", "query", "Q2.txt")
+mapping_path = os.path.join(BASE_DIR, "media", "remote_sparql.rml")
+ontology_file = open(ontology_path)
 query = ""
-rml_file = open("mapping.rml")
+rml_file = open(mapping_path)
 extension = "." + rml_file.name.rsplit('.', 1)[1]
 source_files = sys.argv[1:]
 template_vars = dict()
@@ -244,26 +264,27 @@ temp_files = []
 rdf_files = []
 rulewerk_script = ""
 graph = rdflib.Graph()
-for filename in source_files:
-    table_name = filename[:filename.rfind('.')]
-    file_extension = filename.rsplit('.', 1)[1]
-    template_vars[table_name] = filename
-    if file_extension == "rdf":
-        graph += rdflib.Graph.parse(filename, format="xml")
-    elif file_extension == "ttl":
-        graph += rdflib.Graph.parse(filename, format="turtle")
-    elif file_extension == "nt":
-        graph += rdflib.Graph.parse(filename, format="n3")
-    temp_files.append(open(filename))
-graph.serialize(destination="merged_graph.ttl", format="turtle")
+if len(source_files) > 0:
+    for filename in source_files:
+        table_name = filename[:filename.rfind('.')]
+        file_extension = filename.rsplit('.', 1)[1]
+        template_vars[table_name] = filename
+        if file_extension == "rdf":
+            graph += rdflib.Graph.parse(filename, format="xml")
+        elif file_extension == "ttl":
+            graph += rdflib.Graph.parse(filename, format="turtle")
+        elif file_extension == "nt":
+            graph += rdflib.Graph.parse(filename, format="n3")
+        temp_files.append(open(filename))
+    graph.serialize(destination="merged_graph.ttl", format="turtle")
 java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
-                          "rmlmapper-7.0.0-r374-all.jar"),
-             "-m", rml_file.name]
+                          "rmlmapper-7.3.1-r374-all.jar"),
+             "-m", mapping_path]
 rml_result = jarWrapper(*java_args)
 java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
                           "tw-rewriting.jar"),
-             "ontology.rdf", "query"]
-tw_rewriting_result = jarWrapper(*java_args)
+             ontology_path, query_path]
+tw_rewriting_result = jar8Wrapper(*java_args)
 graph += rdflib.Graph().parse(data=rml_result)
 connection = psycopg2.connect(database="postgres", user="postgres", password="", host="localhost", port="5432")
 with connection.cursor() as cursor:

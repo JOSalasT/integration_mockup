@@ -100,6 +100,11 @@
 
 	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#Cat">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
+		<rdfs:subClassOf rdf:resource="https://www.upcast-privacyui-vocab#Resource"/>
+    </owl:Class>
+	
+	<owl:Class rdf:about="http://www.w3.org/ns/dpv#LegalEntity">
+        <rdfs:subClassOf rdf:resource="https://www.upcast-privacyui-vocab#Resource"/>
     </owl:Class>
 
     <owl:Class rdf:about="http://mmisw.org/ont/univmemphis/sensor#GPS">
