@@ -1,0 +1,106 @@
+@prefix rml: <http://semweb.mmlab.be/ns/rml#> .
+@prefix rr: <http://www.w3.org/ns/r2rml#> .
+@prefix ql: <http://semweb.mmlab.be/ns/ql#> .
+@prefix csvw: <http://www.w3.org/ns/csvw#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://example.org/rules/> .
+@prefix schema: <http://schema.org/> .
+@prefix dbo: <http://dbpedia.org/ontology/> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix sd :  <http://www.w3.org/ns/sparql-service-description#> .
+@prefix d2rq : <http://www.wiwiss.fu-berlin.de/suhl/bizer/D2RQ/0.1#> .
+@prefix upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix td: <https://www.w3.org/2019/wot/td#> .
+@prefix htv: <http://www.w3.org/2011/http#> .
+@prefix hctl: <https://www.w3.org/2019/wot/hypermedia#> .
+@prefix hydra : <http://www.w3.org/ns/hydra/core#> .
+
+:DCAT_source
+    a dcat:Dataset ;
+    dcat:distribution [
+        a dcat:Distribution;
+        dcat:downloadURL "https://dumps.wikimedia.org/wikidatawiki/entities/dcatap.rdf" ].
+
+:RDB a d2rq:Database;
+	d2rq:jdbcDSN "jdbc:mysql://192.168.0.8:5432/sakila";
+	d2rq:jdbcDriver "com.mysql.jdbc.Driver";
+	d2rq:username "postgres";
+	d2rq:password "password".
+
+:RelativePathCWD a rml:LogicalSource;
+  rml:source [ a rml:FilePath, rml:Source;
+    rml:root rml:CurrentWorkingDirectory;
+    rml:path "./sources/exercises.csv";
+  ];
+.
+
+:Local_SPARQL_JSON_source a rml:LogicalSource;
+  rml:source [ a rml:FilePath, rml:Source;
+    rml:root rml:CurrentWorkingDirectory;
+    rml:path "./sources/sparql_json.json";
+  ];
+.
+
+:ls_persons a rml:LogicalSource ; 
+  rml:source [
+   a rml:Source, dcat:Distribution ;
+   dcat:downloadURL "https://rml.io/specs/rml-target/Friends.json" ;
+  ] ;
+.
+
+:SPARQL_JSON_source a sd:Service ;
+    sd:endpoint  <https://dbpedia.org/sparql> ;
+    sd:supportedLanguage sd:SPARQL11Query ;
+    sd:resultFormat  <http://www.w3.org/ns/formats/SPARQL_Results_JSON> .
+	
+:TriplesMapLocalFile2 rml:logicalSource [
+    rml:source "https://query.wikidata.org/sparql?query=SELECT%20%3Fitem%20%3FitemLabel%0A%09WHERE%0A%09%7B%0A%09%3Fitem%20wdt%3AP31%20wd%3AQ146.%20%23%20Must%20be%20a%20cat%0A%09SERVICE%20wikibase%3Alabel%20%7B%20bd%3AserviceParam%20wikibase%3Alanguage%20%22%5BAUTO_LANGUAGE%5D%2Cmul%2Cen%22.%20%7D%20%23%20Helps%20get%20the%20label%20in%20your%20language%2C%20if%20not%2C%20then%20default%20for%20all%20languages%2C%20then%20en%20language%0A%09%7D&format=json" ;
+    rml:iterator "$.results.bindings[*]" ;
+	rml:referenceFormulation ql:JSONPath ;
+	] ;
+	rr:subjectMap [
+		rml:reference "item.value" ;
+		rr:class upcast:Cat ;
+	] ;
+	rr:predicateObjectMap [
+		rr:predicate rdf:value ;
+		rr:objectMap [
+			rml:reference "itemLabel.value" ;
+		]
+	] .
+	
+:TriplesMapLocalFile rml:logicalSource [
+	rml:source :SPARQL_JSON_source ;
+	rml:iterator "$.results.bindings[*]" ;
+	rml:referenceFormulation ql:JSONPath ;
+	rml:query """
+		select distinct ?resource ?resource_label
+        where { ?resource rdfs:label ?resource_label } limit 20
+	"""] ;
+	rr:subjectMap [
+		rml:reference "resource.value" ;
+		rr:class upcast:Resource ;
+	] ;
+	rr:predicateObjectMap [
+		rr:predicate rdf:value ;
+		rr:objectMap [
+			rml:reference "resource_label.value" ;
+		]
+	] .
+	
+:TriplesMapLocalFile3 rml:logicalSource [
+    rml:source :RDB ;
+    rml:query "SELECT city_id, city FROM city;" ;
+    rr:sqlVersion rr:SQL2008;
+	] ;
+	rr:subjectMap [
+		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/user/city/{city_id}" ;
+		rr:class upcast:City ;
+	] ;
+	rr:predicateObjectMap [
+		rr:predicate rdf:value ;
+		rr:objectMap [
+			rml:reference "city" ;
+		]
+	] .

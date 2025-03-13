@@ -1,0 +1,22 @@
+{
+ "version": "1.1",
+ "timestamp": "1622188931",
+ "station": [
+   {
+     "locationX": "4.336531",
+     "locationY": "50.835707",
+     "id": "BE.NMBS.008814001",
+     "name": "Brussels-South/Brussels-Midi",
+     "@id": "http://irail.be/stations/NMBS/008814001",
+     "standardname": "Brussel-Zuid/Bruxelles-Midi"
+   },
+   {
+     "locationX": "0.12380800",
+     "locationY": "51.5304000",
+     "id": "BE.NMBS.007015400",
+     "name": "London Saint Pancras International",
+     "@id": "http://irail.be/stations/NMBS/007015400",
+     "standardname": "London Saint Pancras International"
+   }
+ ]
+}
