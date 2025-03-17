@@ -276,67 +276,24 @@ if len(source_files) > 0:
         elif file_extension == "nt":
             graph += rdflib.Graph.parse(filename, format="n3")
         temp_files.append(open(filename))
-    graph.serialize(destination="merged_graph.ttl", format="turtle")
 java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
                           "rmlmapper-7.3.1-r374-all.jar"),
              "-m", mapping_path]
 rml_result = jarWrapper(*java_args)
 java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
-                          "tw-rewriting.jar"),
+                          "tw-rewriting-sparql.jar"),
              ontology_path, query_path]
-tw_rewriting_result = jar8Wrapper(*java_args)
 graph += rdflib.Graph().parse(data=rml_result)
-connection = psycopg2.connect(database="postgres", user="postgres", password="", host="localhost", port="5432")
-with connection.cursor() as cursor:
-    schema_map = dict()
-    for file in temp_files:
-        table_name = file.name[:file.name.rfind('.')]
-        sql_injection = ""
-        schema_file = open(str(file) + ".sql")
-        for line in schema_file.readlines():
-            sql_injection += line
-        schema_pairs = sql_injection[
-                       sql_injection.rfind('(') + 1: sql_injection.rfind(')')].split(",")
-        columns = []
-        for pair in schema_pairs:
-            column_name = pair.strip().split(" ")[0]
-            columns.append(column_name)
-        schema_map[table_name] = columns
-        cursor.execute(sql_injection)  # TODO I know this is extremely dangerous. This is only
-        # for a controlled demo.
-    for file in temp_files:
-        table_name = file.name[:file.name.rfind('.')]
-        for line in file.readlines()[1:]:
-            columns = schema_map[table_name]
-            values = line.split(",")
-            column_string = "("
-            values_string = "("
-            for i in range(len(values)):
-                value = values[i]
-                if not value == "":
-                    column_string += columns[i] + ","
-                    values_string += value + ","
-            column_string = column_string[:-1] + ")"
-            values_string = values_string[:-1] + ")"
-            cursor.execute(
-                "INSERT INTO " + table_name + column_string + " VALUES" + values_string)
-temp_results = NamedTemporaryFile(mode='w+', encoding='utf-8', newline="\n", delete=False,
-                                  dir=TEMP_DIR,
-                                  suffix=".csv")
-ontop_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "ontop",
-                           "ontop.bat"), "query", "-m", rml_file, "-t",
-              ontology_file, "-q", query,
-              "-p", "integration_mockup/static/systems/ontop/properties.txt",
-              "-a", "merged_graph.ttl",
-               "-o",
-              pathForOntop(temp_results.name)
-              ]
-ontop_process = run(ontop_args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
-print(ontop_process.stdout.decode('utf-8'))
-print(ontop_process.stderr.decode('utf-8'))
+tw_rewriting_result = jar8Wrapper(*java_args)
+if "RESULTING SPARQL QUERY:" in tw_rewriting_result:
+    sparql_query_string = tw_rewriting_result[tw_rewriting_result.index("RESULTING SPARQL QUERY:"):]
+    sparql_query_string = sparql_query_string[sparql_query_string.index("SELECT"):]
+    query_results = graph.query(sparql_query_string)
+    print(len(query_results))
+graph.serialize(destination="merged_graph.ttl", format="turtle")
+
+
 for file in temp_files:
     file.close()
     os.remove(file.name)
 result_text = ""
-for line in temp_results.readlines():
-    result_text += line

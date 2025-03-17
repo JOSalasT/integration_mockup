@@ -89,18 +89,18 @@
 		]
 	] .
 	
-:TriplesMapLocalFile3 rml:logicalSource [
-    rml:source :RDB ;
-    rml:query "SELECT city_id, city FROM city;" ;
-    rr:sqlVersion rr:SQL2008;
-	] ;
-	rr:subjectMap [
-		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/user/city/{city_id}" ;
-		rr:class upcast:City ;
-	] ;
-	rr:predicateObjectMap [
-		rr:predicate rdf:value ;
-		rr:objectMap [
-			rml:reference "city" ;
-		]
-	] .
+#:TriplesMapLocalFile3 rml:logicalSource [
+#    rml:source :RDB ;
+#    rml:query "SELECT city_id, city FROM city;" ;
+#    rr:sqlVersion rr:SQL2008;
+#	] ;
+#	rr:subjectMap [
+#		rr:template "https://www.upcast-project.eu/upcast-privacyui-vocab/user/city/{city_id}" ;
+#		rr:class upcast:City ;
+#	] ;
+#	rr:predicateObjectMap [
+#		rr:predicate rdf:value ;
+#		rr:objectMap [
+#			rml:reference "city" ;
+#		]
+#	] .

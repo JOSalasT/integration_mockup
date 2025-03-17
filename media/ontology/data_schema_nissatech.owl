@@ -90,21 +90,21 @@
 
     <!-- http://mmisw.org/ont/univmemphis/sensor#GPS -->
 	
-	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#User">
+	<owl:Class rdf:about="https://www.upcast-project.eu/upcast-privacyui-vocab#User">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
     </owl:Class>
 	
-	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#Instructor">
+	<owl:Class rdf:about="https://www.upcast-project.eu/upcast-privacyui-vocab#Instructor">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
     </owl:Class>
 
-	<owl:Class rdf:about="https://www.upcast-privacyui-vocab#Cat">
+	<owl:Class rdf:about="https://www.upcast-project.eu/upcast-privacyui-vocab#Cat">
         <rdfs:subClassOf rdf:resource="http://www.w3.org/ns/dpv#LegalEntity"/>
-		<rdfs:subClassOf rdf:resource="https://www.upcast-privacyui-vocab#Resource"/>
+		<rdfs:subClassOf rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#Resource"/>
     </owl:Class>
 	
 	<owl:Class rdf:about="http://www.w3.org/ns/dpv#LegalEntity">
-        <rdfs:subClassOf rdf:resource="https://www.upcast-privacyui-vocab#Resource"/>
+        <rdfs:subClassOf rdf:resource="https://www.upcast-project.eu/upcast-privacyui-vocab#Resource"/>
     </owl:Class>
 
     <owl:Class rdf:about="http://mmisw.org/ont/univmemphis/sensor#GPS">

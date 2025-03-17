@@ -7,5 +7,5 @@ PREFIX upcast: <https://www.upcast-project.eu/upcast-privacyui-vocab#>
 SELECT ?entity ?label
 WHERE
 { ?entity a upcast:Resource  .
-  ?entity rdf:label ?label .
+  ?entity rdf:value ?label .
 }
