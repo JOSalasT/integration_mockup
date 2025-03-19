@@ -1,3 +1,4 @@
+import argparse
 import os
 import sys
 
@@ -198,11 +199,23 @@ def rulewerkImportString(file_list, schema_list):
     print(ans)
 
 
+parser = argparse.ArgumentParser()
+parser.add_argument("-o", "--ontology", help="Path to ontology file", required=True)
+parser.add_argument("-m", "--mapping", help="Path to RML file", required=True)
+parser.add_argument("-q", "--query", help="Path to SPARQL query", required=False)
+parser.add_argument("-s", "--sources", help="Path to local sources", required=False)
+args = parser.parse_args()
 ontology_tgds = ontology_to_RLS_with_triples("ontology.rdf")
+if args.ontology is not None:
+    ontology_tgds = ontology_to_RLS_with_triples(args.ontology)
 query = "SELECT * WHERE {?s ?p ?o}"
+if args.query is not None:
+    query = args.query
 rml_file = open("mapping.rml")
+if args.mapping is not None:
+    rml_file = open(args.mapping)
 extension = "." + rml_file.name.rsplit('.', 1)[1]
-source_files = sys.argv[1:]
+source_files = os.listdir(args.sources) if args.sources is not None else []
 template_vars = dict()
 temp_files = []
 rdf_files = []

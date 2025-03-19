@@ -50,8 +50,8 @@ def jarWrapper(*args):
     # ret += stdout.decode('utf-8').split('\n')
     # if stderr != '':
     #     ret += stderr.decode('utf-8').split('\n')
-    print(javaProcess.stderr.decode('utf-8'))
-    return javaProcess.stdout.decode('utf-8')
+    print(javaProcess.stderr.decode('utf-8', errors='ignore'))
+    return javaProcess.stdout.decode('utf-8', errors='ignore')
 
 
 def writeTextToTemporaryFile(temporaryFile, text):
@@ -375,7 +375,7 @@ def process(request):
                             temp_rml_file.write(temp_string)
                         temp_rml_file.seek(0)
                         java_args = [os.path.join(BASE_DIR, "integration_mockup", "static", "jar",
-                                                  "rmlmapper-7.0.0-r374-all.jar"),
+                                                  "rmlmapper-7.3.1-r374-all.jar"),
                                      "-m", temp_rml_file.name]
                         rml_result = jarWrapper(*java_args)
                         graph = rdflib.Graph().parse(data=rml_result)
@@ -405,21 +405,30 @@ def process(request):
                             for v in query_results.vars:
                                 result_text += q.get(v) + "\n"
                         temp_rml_file.close()
-                        docker_string = """FROM java:8-jdk
-                        WORKDIR /usr/src/dex
-                        COPY {0}
-                        COPY {1}
-                        COPY {2}
-                        COPY {3}
-                        CMD[\"java\",\"-jar\",\"./rulewerk-client-0.10.0.jar\",\"--rule-file\",./{4},\"rdf_graph(?s,?p,?o)\",\"--print-complete-query-result\"]
-                        """.format(os.path.join(TEMP_DIR, temp_ontology_file.name),
-                                   os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
-                                                "rulewerk-client-0.10.0.jar"),
-                                   os.path.join(TEMP_DIR, temp_rml_file.name),
-                                   os.path.join(TEMP_DIR, temp_rls_file.name),
-                                   temp_rls_file.name,
-                                   os.path.join(BASE_DIR, "integration_mockup", "static", "systems", "rulewerk",
-                                                "rulewerk-client-0.10.0.jar"))
+                        docker_string = """
+FROM python:3.10
+COPY --from=openjdk:8-jre-slim /usr/local/openjdk-8 /usr/local/openjdk-8
+
+ENV JAVA_HOME=/usr/local/openjdk-8
+WORKDIR /usr/src/app
+
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
+COPY {0} ./
+COPY {1} ./
+COPY {2} ./
+ENTRYPOINT [\"python\",\"./forward_chain.py\"]
+                        """.format(os.path.join("integration", "forward_chain.py").replace("\\", "/"),
+                                   os.path.join("integration_mockup", "static", "systems", "rulewerk",
+                                                "rulewerk-client-0.10.0.jar").replace("\\", "/"),
+                                   os.path.join("integration_mockup", "static", "jar",
+                                                "rmlmapper-7.3.1-r374-all.jar").replace("\\", "/"))
+                        docker_file = open("Dockerfile", "w")
+                        writeTextToTemporaryFile(docker_file, docker_string)
+                        docker_args = ["wsl", "docker", "build", "-f", docker_file.name, "."]
+                        ontop_process = run(docker_args, stdin=PIPE, stdout=PIPE, stderr=PIPE)
+                        print(ontop_process.stdout.decode('utf-8'))
+                        print(ontop_process.stderr.decode('utf-8'))
                         os.remove(temp_rml_file.name)
                         temp_ontology_file.close()
                         os.remove(temp_ontology_file.name)
